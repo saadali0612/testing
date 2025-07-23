@@ -1,0 +1,1470 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>Math Modes Sequel - Revised UI</title>
+  <meta name="Generator" content="Claude-3 Opus AI">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
+          processEscapes: true
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+      body { font-family: sans-serif; font-size: 1.1rem; background-color: #f1f5f9; }
+      .message-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #ef4444; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000; display: none; font-size: 1rem; font-weight: bold; }
+      select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+      input, textarea, select { font-size: 1rem; }
+      input::placeholder, textarea::placeholder { font-weight: normal; color: #9ca3af; }
+      .hidden { display: none !important; }
+      .toggle-btn { width: 3.5rem; height: 2rem; border-radius: 9999px; padding: 0.25rem; transition: background-color 0.2s ease-in-out; cursor: pointer; }
+      .toggle-dot { width: 1.5rem; height: 1.5rem; background-color: white; border-radius: 9999px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); transition: transform 0.2s ease-in-out; }
+      .toggle-on { background-image: linear-gradient(130deg, #2B6DFE, #00F2FF); }
+      .toggle-off { background-color: #d1d5db; }
+      .dot-on { transform: translateX(1.5rem); }
+      .remove-line-button { background-color: transparent; color: #ef4444; border: none; padding: 0; font-size: 1.5rem; line-height: 1; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: color 0.2s ease-in-out; }
+      .remove-line-button:hover { color: #dc2626; }
+      #contentWrapper { display: flex; flex-direction: column; gap: 1rem; width: 100%; flex-grow: 1;}
+      #inputsPanel { position: relative; width: 100%; background-color: #f8fafc; padding: 1rem; border-radius: 0.5rem; display: flex; flex-direction: column; gap: 1rem; transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, border 0.3s ease-in-out; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      #displayWrapper { width: 100%; background-color: #dbeafe; border-radius: 0.5rem; overflow: auto; border: 2px solid #e2e8f0; transition: all 0.3s ease-in-out; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; display: flex; justify-content: center; align-items: center; flex-grow: 1; }
+      #displayWrapper.display-shrunken { height: 250px; min-height: 250px; flex-grow: 0; }
+      #textDisplayWrapper { padding: 2rem; height: 100%; width: 100%; overflow-y: auto; }
+      #textDisplayWrapper p { margin-bottom: 1.5rem; font-size: 2.25rem; line-height: 2; text-align: center; }
+      #mathCanvas { display: block; width: 100%; height: 100%; cursor: default; }
+      #answerWrapper { background-color: #d1fae5; border: 2px solid #a7f3d0; border-radius: 0.5rem; padding: 2rem; margin-top: 1rem; }
+      #answerWrapper p { margin-bottom: 1rem; font-size: 2.25rem; line-height: 1.8; }
+      #answerWrapper p.final-answer { font-size: 2.25rem; font-weight: bold;}
+      @media (min-width: 768px) {
+          #contentWrapper { flex-direction: row; }
+          #inputsPanel { width: 33.333333%; }
+          #inputsPanel.panel-hidden { width: 0; padding: 0; overflow: hidden; border: none; opacity: 0; }
+          #displayWrapper { width: 66.666666%; height: 600px; }
+          #displayWrapper.canvas-expanded { width: 100%; }
+      }
+  </style>
+</head>
+<body class="bg-f1f5f9 flex items-center justify-center p-4">
+    <div class="w-full mx-auto bg-white rounded-2xl p-6 flex flex-col gap-4 min-h-screen">
+        <div id="topControlsRow" class="flex flex-wrap items-center justify-between gap-4">
+            <div id="main-controls" class="flex flex-wrap items-center gap-4 justify-center md:justify-start">
+                <select id="modeSelector" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 text-sm md:text-base rounded-lg transition border-2 border-transparent focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    <option value="equationSolver">Equation Solver</option>
+                    <option value="expressionSimplifier">Expression Simplifier</option>
+                    <option value="scatterPlotBestFit">Scatter Plot & Line of Best Fit</option>
+                    <option value="functionExplorer">Interactive Function Explorer</option>
+                    <option value="scientificNotation">Scientific Notation Tool</option>
+                    <option value="exponentRules">Exponent Rules Explorer</option>
+                    <option value="irrationalExplorer">Irrational Number Explorer</option>
+                    <option value="dataSetAnalyzer">Data Set Analyzer</option>
+                    <option value="probabilitySimulator">Probability Simulator</option>
+                    <option value="functionTransformation">Function Transformation Tool</option>
+                    <option value="systemsOfEquations">Systems of Equations Solver</option>
+                    <option value="linearEquationFromData">Linear Equation from Data</option>
+                    <option value="congruenceSimilarity">Congruence/Similarity Explorer</option>
+                    <option value="interactiveCoordinatePlane">Interactive Coordinate Plane</option>
+                    <option value="geometricSeries">Geometric Series Visualizer</option>
+                </select>
+                <div id="top-input-container" class="flex flex-wrap items-center gap-2"></div>
+            </div>
+            <div class="flex items-center gap-6 ml-auto">
+                <div id="answer-toggle-wrapper" class="hidden flex items-center gap-2">
+                    <span class="text-sm font-semibold">$Answer$</span>
+                    <button id="answer-toggle-btn" class="toggle-btn toggle-off">
+                        <div id="answer-toggle-dot" class="toggle-dot"></div>
+                    </button>
+                </div>
+                <div id="menu-toggle-wrapper" class="flex items-center gap-2">
+                    <span class="text-sm font-semibold">$Menu$</span>
+                    <button id="menu-toggle-btn" class="toggle-btn toggle-on">
+                        <div id="menu-toggle-dot" class="toggle-dot dot-on"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="contentWrapper">
+            <div id="inputsPanel"></div>
+            <div id="displayWrapper">
+                <canvas id="mathCanvas"></canvas>
+                <div id="textDisplayWrapper" class="hidden"></div>
+            </div>
+        </div>
+        <div id="answerWrapper" class="hidden"></div>
+        <div id="messageBox" class="message-box"></div>
+    </div>
+<script>
+// --- GLOBAL DOM ELEMENTS & STATE ---
+const modeSelector = document.getElementById('modeSelector');
+const messageBox = document.getElementById('messageBox');
+const inputsPanel = document.getElementById('inputsPanel');
+const displayWrapper = document.getElementById('displayWrapper');
+const mathCanvas = document.getElementById('mathCanvas');
+const textDisplayWrapper = document.getElementById('textDisplayWrapper');
+const answerWrapper = document.getElementById('answerWrapper');
+const topInputContainer = document.getElementById('top-input-container');
+const contentWrapper = document.getElementById('contentWrapper');
+const mainControls = document.getElementById('main-controls');
+const ctx = mathCanvas.getContext('2d');
+const menuToggleWrapper = document.getElementById('menu-toggle-wrapper');
+const menuToggleBtn = document.getElementById('menu-toggle-btn');
+const menuToggleDot = document.getElementById('menu-toggle-dot');
+const answerToggleWrapper = document.getElementById('answer-toggle-wrapper');
+const answerToggleBtn = document.getElementById('answer-toggle-btn');
+const answerToggleDot = document.getElementById('answer-toggle-dot');
+let currentMode = 'equationSolver';
+const colors = { main: '#000000', answer: '#059669', point: '#2B6DFE', grid: '#a0aec0', axis: '#64748b', primaryBlue: '#007bff', label: '#94a3b8', parentFunc: '#f97316', manualLine: '#db2777', targetShape: '#475569', negativeTerm: '#ef4444' };
+const defaultLineColors = ['#2B6DFE', '#ef4444', '#22c55e', '#8b5cf6', '#f97316', '#14b8a6'];
+let nextLineColorIndex = 0;
+// State
+let isAnswerToggledOn = false;
+let snapIndicatorPos = null; // Canvas Coordinates {x, y}
+let snappedMathPos = null;   // Math Coordinates {x, y}
+let isDrawingLine = false;
+let lineStartPoint = null;
+let manualLinePoint1 = { x: -5, y: -5 };
+let manualLinePoint2 = { x: 5, y: 5 };
+let draggingPoint = null;
+let plottedObjects = [];
+let currentTool = 'plotPoint';
+let analysisResults = null; // For Data Set Analyzer
+let simulationResults = null; // For Probability Simulator
+const topRowInputModes = ['equationSolver', 'expressionSimplifier', 'scientificNotation', 'exponentRules', 'dataSetAnalyzer', 'irrationalExplorer', 'probabilitySimulator'];
+const textBasedModes = topRowInputModes;
+// --- UI TEMPLATES & GENERATORS ---
+const panelInputTemplates = {
+    scatterPlotBestFit: `<h3 class="font-bold text-xl text-slate-800">$Scatter Plot Data$</h3><div><label for="scatter-data" class="text-lg font-semibold text-slate-700 mb-1 block">$Data Points (x, y):$</label><textarea id="scatter-data" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" rows="10" placeholder="(1, 2)\\n2, 3\\n(3, 3.5)">1, 1.5\n2, 3.2\n3, 3.1\n4, 4.8\n5, 5.2\n6, 7.1</textarea></div><div><label for="scatter-title" class="text-lg font-semibold text-slate-700 mb-1 block">$Chart Title:$</label><input type="text" id="scatter-title" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="Sample Data"></div><div><label for="scatter-x-label" class="text-lg font-semibold text-slate-700 mb-1 block">$X-Axis Label:$</label><input type="text" id="scatter-x-label" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="Independent Variable"></div><div><label for="scatter-y-label" class="text-lg font-semibold text-slate-700 mb-1 block">$Y-Axis Label:$</label><input type="text" id="scatter-y-label" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="Dependent Variable"></div><div class="flex items-center gap-2 mt-2"><input type="checkbox" id="show-best-fit" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked><label for="show-best-fit" class="text-lg font-semibold text-slate-700">$Show Line of Best Fit$</label></div>`,
+    functionExplorer: `<h3 class="font-bold text-xl text-slate-800 mb-2">$Function Explorer$</h3><div id="equationLinesContainer" class="flex flex-col gap-2 w-full"></div><button type="button" id="add-function-btn" class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-blue-600 text-base mt-2 self-start">$Add Function$</button><div class="mt-4 pt-4 border-t-2"><h4 class="font-bold text-xl text-slate-800 mb-2">$Input/Output Table$</h4><div class="flex items-center gap-2"><label for="table-x-values" class="text-lg">$x = $</label><input type="text" id="table-x-values" class="flex-grow p-1 border-2 rounded-lg text-base" value="-2, -1, 0, 1, 2" placeholder="e.g., -2, -1, 0, 1, 2"></div><div id="function-table-container" class="mt-2 max-h-48 overflow-y-auto"></div></div>`,
+    functionTransformation: `<h3 class="font-bold text-xl text-slate-800">$Function Transformations$</h3><p class="text-lg bg-slate-100 p-2 rounded-lg text-center">$g(x) = a \\cdot f(b \\cdot (x - h)) + k$</p><div><label for="parent-function" class="text-lg font-semibold text-slate-700">$f(x):$</label><select id="parent-function" class="w-full bg-slate-200 p-2 rounded-lg text-base mt-1"><option value="x**2">$f(x) = x^2$</option><option value="x**3">$f(x) = x^3$</option><option value="Math.abs(x)">$f(x) = |x|$</option><option value="Math.sqrt(x)">$f(x) = \\sqrt{x}$</option><option value="Math.sin(x)">$f(x) = \\sin(x)$</option><option value="x">$f(x) = x$</option></select></div><div class="grid grid-cols-3 items-center gap-2 mt-2"><label for="slider-a" class="text-lg font-semibold">$a$</label><input type="range" id="slider-a" min="-5" max="5" value="1" step="0.1" class="col-span-2"><span id="label-a" class="text-lg col-start-2 col-span-2">$1$</span><label for="slider-b" class="text-lg font-semibold">$b$</label><input type="range" id="slider-b" min="-5" max="5" value="1" step="0.1" class="col-span-2"><span id="label-b" class="text-lg col-start-2 col-span-2">$1$</span><label for="slider-h" class="text-lg font-semibold">$h$</label><input type="range" id="slider-h" min="-10" max="10" value="0" step="0.5" class="col-span-2"><span id="label-h" class="text-lg col-start-2 col-span-2">$0$</span><label for="slider-k" class="text-lg font-semibold">$k$</label><input type="range" id="slider-k" min="-10" max="10" value="0" step="0.5" class="col-span-2"><span id="label-k" class="text-lg col-start-2 col-span-2">$0$</span></div><div class="flex items-center gap-2 mt-2"><input type="checkbox" id="show-parent-func" class="h-4 w-4 rounded" checked><label for="show-parent-func" class="text-lg">$Show Parent f(x)$</label></div>`,
+    systemsOfEquations: `<h3 class="font-bold text-xl text-slate-800 mb-2">$Systems of Equations$</h3><div id="equationLinesContainer" class="flex flex-col gap-2 w-full"></div><button type="button" id="add-equation-btn" class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-blue-600 text-base mt-2 self-start">$Add Equation$</button><div id="solution-display" class="mt-4 pt-4 border-t-2 bg-slate-100 p-3 rounded-lg"></div>`,
+    linearEquationFromData: `<h3 class="font-bold text-xl text-slate-800">$Linear Model from Data$</h3><div><label for="scatter-data" class="text-lg font-semibold text-slate-700 mb-1 block">$Data Points (x, y):$</label><textarea id="scatter-data" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" rows="8" placeholder="(1, 2)\\n2, 3\\n(3, 3.5)">1, 1.8\n2, 3.9\n3, 6.3\n4, 8.1\n5, 10.2</textarea></div><div class="flex items-center gap-2 mt-2"><input type="checkbox" id="show-best-fit" class="h-4 w-4 rounded" checked><label for="show-best-fit" class="text-lg font-semibold text-slate-700">$Show Calculated Best Fit$</label></div><div class="mt-2 pt-2 border-t"><h4 class="font-bold text-xl text-slate-800 mb-2">$Manual Fit Line$</h4><p class="text-base">Drag the <span class="text-pink-600 font-bold">pink handles</span> on the graph to create your own line.</p><div id="manual-line-eq" class="mt-2 p-2 bg-slate-100 rounded text-center text-lg"></div></div><div class="mt-2 pt-2 border-t"><h4 class="font-bold text-xl text-slate-800 mb-2">$Prediction$</h4><div class="flex items-center gap-2"><label for="prediction-x" class="text-lg">$When x = $</label><input type="number" id="prediction-x" class="w-24 p-1 border-2 rounded-lg text-base" value="6"></div><div id="prediction-y" class="mt-2 p-2 bg-slate-100 rounded text-base"></div></div>`,
+    congruenceSimilarity: `<h3 class="font-bold text-xl text-slate-800">$Congruence \\& Similarity$</h3><p class="text-base">Transform the <span class="font-bold" style="color:${colors.primaryBlue}">blue shape</span> to match the <span class="font-bold" style="color:${colors.targetShape}">gray shape</span>.</p><div class="grid grid-cols-3 items-center gap-2 mt-2"><label for="slider-tx" class="text-lg font-semibold">$Translate~X$</label><input type="range" id="slider-tx" min="-10" max="10" value="0" step="0.5" class="col-span-2"><span id="label-tx" class="text-lg col-start-2 col-span-2">$0$</span><label for="slider-ty" class="text-lg font-semibold">$Translate~Y$</label><input type="range" id="slider-ty" min="-10" max="10" value="0" step="0.5" class="col-span-2"><span id="label-ty" class="text-lg col-start-2 col-span-2">$0$</span><label for="slider-rot" class="text-lg font-semibold">$Rotate$</label><input type="range" id="slider-rot" min="-180" max="180" value="0" step="1" class="col-span-2"><span id="label-rot" class="text-lg col-start-2 col-span-2">$0°$</span><label for="slider-scale" class="text-lg font-semibold">$Scale$</label><input type="range" id="slider-scale" min="0.1" max="3" value="1" step="0.1" class="col-span-2"><span id="label-scale" class="text-lg col-start-2 col-span-2">$1$</span></div><div id="check-result" class="mt-4 p-3 bg-slate-100 rounded text-center text-lg font-bold"></div>`,
+    interactiveCoordinatePlane: `<h3 class="font-bold text-xl text-slate-800">$Coordinate Plane$</h3><div><h4 class="text-lg font-semibold text-slate-700 mb-1">$Tools$</h4><div class="flex items-center gap-4"><label class="text-base"><input type="radio" name="coord-tool" value="plotPoint" checked> $Plot Point$</label><label class="text-base"><input type="radio" name="coord-tool" value="drawLine"> $Draw Line$</label></div></div><div class="mt-2 pt-2 border-t flex-grow flex flex-col"><h4 class="font-bold text-xl text-slate-800 mb-2">$Objects$</h4><div id="objects-list" class="flex-grow max-h-96 overflow-y-auto text-base"></div></div>`,
+    geometricSeries: `<h3 class="font-bold text-xl text-slate-800">$Geometric Series Visualizer$</h3><p class="text-lg bg-slate-100 p-2 rounded-lg text-center">$S_n = a + ar + ar^2 + ...$</p><div class="grid grid-cols-3 items-center gap-2 mt-2"><label for="slider-a" class="text-lg font-semibold">$a$ (first term)</label><input type="range" id="slider-a" min="-5" max="5" value="1" step="0.1" class="col-span-2"><span id="label-a" class="text-lg col-start-2 col-span-2">$1$</span><label for="slider-r" class="text-lg font-semibold">$r$ (ratio)</label><input type="range" id="slider-r" min="-1.5" max="1.5" value="0.5" step="0.01" class="col-span-2"><span id="label-r" class="text-lg col-start-2 col-span-2">$0.5$</span></div><div><label for="series-terms" class="text-lg font-semibold text-slate-700 mb-1 block">$Terms to show:$</label><input type="number" id="series-terms" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="10" min="1" max="50"></div><div id="series-results" class="mt-4 pt-4 border-t-2 bg-slate-100 p-3 rounded-lg text-base"></div>`,
+};
+const topRowInputTemplates = {
+    irrationalExplorer: `<label for="number-input" class="text-base font-semibold text-slate-700">Number:</label><input type="text" id="number-input" class="p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., pi, sqrt(2)" value="pi">`,
+    scientificNotation: `<label for="sci-num-input" class="text-base font-semibold text-slate-700">Number:</label><input type="text" id="sci-num-input" class="p-2 border-2 border-slate-300 rounded-lg text-base" value="12345.67">`,
+    exponentRules: `<label for="exponent-expression" class="text-base font-semibold text-slate-700">Expression:</label><input type="text" id="exponent-expression" class="w-64 p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., x^2 * x^3" value="x^2 * x^3">`,
+    dataSetAnalyzer: `<label for="data-set" class="text-base font-semibold text-slate-700">Data:</label><textarea id="data-set" class="p-2 border-2 border-slate-300 rounded-lg text-base" rows="1" style="width: 250px; height: 40px;">1,2,2,3,4,5,5,5,6,7</textarea>`,
+    probabilitySimulator: `<select id="sim-type" class="bg-slate-200 p-2 rounded-lg text-base"><option value="coin">Coin Flip</option><option value="twoCoins">Two Coin Flips</option><option value="dice6">6-Sided Dice</option><option value="sum2d6">Sum of 2 6-Sided Dice</option><option value="coinAndDice">Coin & Dice Roll</option><option value="dice20">20-Sided Dice</option></select><label for="sim-trials" class="text-base font-semibold text-slate-700">Trials:</label><input type="number" id="sim-trials" class="w-24 p-2 border-2 border-slate-300 rounded-lg text-base" value="1000">`,
+    expressionSimplifier: `<label for="algebraic-expression" class="text-base font-semibold text-slate-700">Expression:</label><input type="text" id="algebraic-expression" class="flex-grow p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., 2(3x + 4) - 5x" value="3(2x + 5) - 4x + 7">`,
+    equationSolver: `<label for="equation-input" class="text-base font-semibold text-slate-700">Equation:</label><input type="text" id="equation-input" class="flex-grow p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., x^2 + 2*x - 15 = 0" value="x^2 + 2*x - 15 = 0">`
+};
+// --- UTILITY FUNCTIONS ---
+function showMessage(message, isError=false, duration = 3000) { messageBox.textContent = message; messageBox.style.backgroundColor = isError ? '#ef4444' : '#22c55e'; messageBox.style.display = 'block'; setTimeout(() => { messageBox.style.display = 'none'; }, duration); }
+function clearCanvas(canvas, context) { context.clearRect(0, 0, canvas.width, canvas.height); }
+function formatExpressionForJax(str) { return str.replace(/\*/g, ' \\cdot ').replace(/\//g, ' / '); }
+// --- PARSING & CALCULATION FUNCTIONS ---
+function parseScatterData(dataString) {
+    const points = [];
+    const lines = dataString.split(/[\n\r]+/).filter(line => line.trim() !== '');
+    const regex = /^\s*\(*\s*(-?\d*\.?\d+)\s*[,;\s]\s*(-?\d*\.?\d+)\s*\)*\s*$/;
+    for (const line of lines) {
+        const match = line.trim().match(regex);
+        if (match) {
+            const x = parseFloat(match[1]);
+            const y = parseFloat(match[2]);
+            if (!isNaN(x) && !isNaN(y)) {
+                points.push({ x, y });
+            }
+        }
+    }
+    return points;
+}
+function calculateLinearRegression(data) {
+    if (data.length < 2) return { m: NaN, b: NaN, r2: NaN };
+    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+    const n = data.length;
+    data.forEach(p => { sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumX2 += p.x * p.x; sumY2 += p.y * p.y; });
+    const m_denominator = (n * sumX2 - sumX * sumX);
+    if (m_denominator === 0) return { m: Infinity, b: Infinity, r2: NaN };
+    const m = (n * sumXY - sumX * sumY) / m_denominator;
+    const b = (sumY - m * sumX) / n;
+    const r2_numerator = Math.pow((n * sumXY - sumX * sumY), 2);
+    const r2_denominator = (n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY);
+    const r2 = r2_denominator === 0 ? 1 : r2_numerator / r2_denominator;
+    return { m, b, r2 };
+}
+function parseNumberInput(input) {
+    const s = input.trim().toLowerCase();
+    if (s === 'pi') return { val: Math.PI, type: 'Irrational (π)', symbol: 'π' };
+    if (s === 'e') return { val: Math.E, type: 'Irrational (e)', symbol: 'e' };
+    const sqrtMatch = s.match(/^sqrt\((\d+\.?\d*)\)$/);
+    if (sqrtMatch) {
+        const num = parseFloat(sqrtMatch[1]);
+        if (num < 0) return null;
+        const val = Math.sqrt(num);
+        const isRational = Number.isInteger(Math.sqrt(num));
+        return { val, type: isRational ? 'Rational' : 'Irrational', symbol: `\\sqrt{${num}}` };
+    }
+    const fracMatch = s.match(/^(-?\d+)\s*\/\s*(\d+)$/);
+    if (fracMatch) {
+        const num = parseInt(fracMatch[1]);
+        const den = parseInt(fracMatch[2]);
+        if (den === 0) return null;
+        return { val: num / den, type: 'Rational', symbol: `\\frac{${num}}{${den}}` };
+    }
+    const num = parseFloat(s);
+    if (!isNaN(num)) return { val: num, type: Number.isInteger(num) ? 'Integer' : 'Rational', symbol: s };
+    return null;
+}
+function parseLinearEquation(str) {
+    str = str.replace(/\s/g, '');
+    let m = 0, b = 0;
+    let match = str.match(/^y=([+\-]?\d*\.?\d*)x([+\-]\d+\.?\d*)?$/);
+    if (match) { m = match[1] === '' ? 1 : match[1] === '-' ? -1 : parseFloat(match[1]) || 0; b = parseFloat(match[2]) || 0; return { m, b }; }
+    match = str.match(/^y=([+\-]?\d+\.?\d*)$/);
+    if (match) { m = 0; b = parseFloat(match[1]); return { m, b }; }
+    match = str.match(/^([+\-]?\d*\.?\d*)x([+\-]\d*\.?\d*)y=([+\-]?\d+\.?\d*)$/);
+    if (match) {
+        let A = match[1] === '' ? 1 : match[1] === '-' ? -1 : parseFloat(match[1]) || 0;
+        let B = match[2] === '+' ? 1 : match[2] === '-' ? -1 : parseFloat(match[2]) || 1;
+        let C = parseFloat(match[3]);
+        if (B === 0) return null; return { m: -A/B, b: C/B };
+    }
+    return null;
+}
+function runDataSetAnalysis() {
+    const dataStr = document.getElementById('data-set')?.value || '';
+    const data = dataStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n)).sort((a,b) => a - b);
+    if (data.length === 0) { showMessage("Data set is empty.", true); analysisResults = null; return; }
+    
+    const n = data.length;
+    const sum = data.reduce((acc, val) => acc + val, 0);
+    const mean = sum / n;
+    const median = n % 2 === 0 ? (data[n/2 - 1] + data[n/2]) / 2 : data[Math.floor(n/2)];
+    const counts = {};
+    data.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+    let mode = [];
+    let maxFreq = 0;
+    for (const key in counts) {
+        if (counts[key] > maxFreq) { mode = [key]; maxFreq = counts[key]; } 
+        else if (counts[key] === maxFreq && counts[key] > 1) { mode.push(key); }
+    }
+    if (maxFreq <= 1) mode = ['None'];
+    const range = data[n-1] - data[0];
+    const variance = data.reduce((acc, val) => acc + (val - mean)**2, 0) / n;
+    const stdDev = Math.sqrt(variance);
+    const q1Index = Math.floor((n + 1) / 4 - 1);
+    const q3Index = Math.floor(3 * (n + 1) / 4 - 1);
+    const q1 = data[q1Index];
+    const q3 = data[q3Index];
+    analysisResults = { data, n, mean, median, mode, range, variance, stdDev, minVal: data[0], q1, q3, maxVal: data[n-1] };
+    
+    const { minVal, maxVal } = analysisResults;
+    let analysisHtml = `<h4 class="font-bold text-xl text-slate-800">$Central Tendency$</h4>`;
+    analysisHtml += `<p>Mean: ${mean.toFixed(3)}</p>`;
+    analysisHtml += `<p>Median: ${median.toFixed(3)}</p>`;
+    analysisHtml += `<p>Mode: ${mode.join(', ')}</p>`;
+    analysisHtml += `<h4 class="font-bold text-xl text-slate-800 mt-4">$Spread$</h4>`;
+    analysisHtml += `<p>Range: ${range.toFixed(3)}</p>`;
+    analysisHtml += `<p>Min: ${minVal.toFixed(3)}, Q1: ${q1.toFixed(3)}, Q3: ${q3.toFixed(3)}, Max: ${maxVal.toFixed(3)}</p>`;
+    analysisHtml += `<p>Standard Deviation: ${stdDev.toFixed(3)}</p>`;
+    answerWrapper.innerHTML = analysisHtml;
+    if(window.MathJax) MathJax.typesetPromise([answerWrapper]);
+    handleDraw();
+}
+function runSimulation() {
+    const simType = document.getElementById('sim-type').value;
+    const trials = parseInt(document.getElementById('sim-trials').value);
+    if (isNaN(trials) || trials <= 0) { showMessage("Please enter a valid number of trials.", true); return; }
+    
+    let outcomes = [];
+    const counts = {};
+    if (simType === 'coin') {
+        outcomes = ['Heads', 'Tails'];
+        outcomes.forEach(o => counts[o] = 0);
+        for (let i = 0; i < trials; i++) {
+            counts[outcomes[Math.floor(Math.random() * 2)]]++;
+        }
+    } else if (simType === 'twoCoins') {
+        outcomes = ['HH', 'HT', 'TH', 'TT'];
+        outcomes.forEach(o => counts[o] = 0);
+        const sides = ['H', 'T'];
+        for (let i = 0; i < trials; i++) {
+            const r1 = sides[Math.floor(Math.random() * 2)];
+            const r2 = sides[Math.floor(Math.random() * 2)];
+            counts[r1 + r2]++;
+        }
+    } else if (simType === 'dice6') {
+        outcomes = ['1','2','3','4','5','6'];
+        outcomes.forEach(o => counts[o] = 0);
+        for (let i = 0; i < trials; i++) {
+            counts[(Math.floor(Math.random() * 6) + 1).toString()]++;
+        }
+    } else if (simType === 'sum2d6') {
+        outcomes = Array.from({length: 11}, (_, i) => (i+2).toString());
+        outcomes.forEach(o => counts[o] = 0);
+        for (let i = 0; i < trials; i++) {
+            const r1 = Math.floor(Math.random() * 6) + 1;
+            const r2 = Math.floor(Math.random() * 6) + 1;
+            counts[(r1 + r2).toString()]++;
+        }
+    } else if (simType === 'coinAndDice') {
+        const sides = ['H', 'T'];
+        for(const s of sides){ for(let i=1; i<=6; i++){ outcomes.push(s+i); } }
+        outcomes.forEach(o => counts[o] = 0);
+        for (let i = 0; i < trials; i++) {
+            const coin = sides[Math.floor(Math.random() * 2)];
+            const dice = Math.floor(Math.random() * 6) + 1;
+            counts[coin + dice]++;
+        }
+    } else if (simType === 'dice20') {
+        outcomes = Array.from({length: 20}, (_, i) => (i+1).toString());
+        outcomes.forEach(o => counts[o] = 0);
+        for (let i = 0; i < trials; i++) {
+            counts[(Math.floor(Math.random() * 20) + 1).toString()]++;
+        }
+    }
+    
+    simulationResults = { counts, trials, outcomes, simType };
+    handleDraw();
+}
+function runSimplification() {
+    let expr = document.getElementById('algebraic-expression')?.value.trim() || '';
+    if (!expr) { showMessage("Please enter an expression to simplify.", true); return; }
+    let stepsHtml = [`<p><strong>Original Expression:</strong></p><p>$$${formatExpressionForJax(expr)}$$</p>`];
+    let currentExpr = expr;
+    // --- Step 1: Distribution ---
+    let hadDistribution = false;
+    while (true) {
+        let match = currentExpr.match(/(-?\d*\.?\d*)\s*\*?\s*\(([^\(\)]+)\)/);
+        if (!match) break;
+        hadDistribution = true;
+        let factorStr = match[1];
+        let innerExpr = match[2];
+        let factor = (factorStr === '' || factorStr === '+') ? 1 : (factorStr === '-') ? -1 : parseFloat(factorStr);
+        const terms = innerExpr.replace(/\s/g, '').replace(/-/g, '+-').split('+').filter(t => t);
+        const expanded = terms.map(term => {
+            const termMatch = term.match(/(-?\d*\.?\d*)([a-zA-Z\^0-9]*)/);
+            let coeff = (termMatch[1] === '' || termMatch[1] === '+') ? 1 : (termMatch[1] === '-') ? -1 : parseFloat(termMatch[1]);
+            const variable = termMatch[2] || '';
+            let newCoeff = factor * coeff;
+            if (newCoeff > 0) return `+${newCoeff}${variable}`;
+            return `${newCoeff}${variable}`;
+        }).join('');
+        currentExpr = currentExpr.replace(match[0], ` ${expanded} `);
+    }
+    if (hadDistribution) {
+        stepsHtml.push(`<p><strong>Apply Distributive Property:</strong></p><p>$$${formatExpressionForJax(currentExpr)}$$</p>`);
+    }
+    // --- Step 2: Combine Like Terms ---
+    let processedExpr = currentExpr.replace(/\s/g, '').replace(/-/g, '+-');
+    if (!processedExpr.startsWith('+') && !processedExpr.startsWith('-')) processedExpr = '+' + processedExpr;
+    const termList = processedExpr.match(/[+\-][^+\-]+/g) || [];
+    const termMap = new Map();
+    termList.forEach(term => {
+        const match = term.match(/([+\-]\d*\.?\d*)([a-zA-Z\^0-9]*)?|([+\-])([a-zA-Z\^0-9]+)/);
+        let coeff, variable;
+        if (match[1]) {
+            coeff = (match[1] === '+') ? 1 : (match[1] === '-') ? -1 : parseFloat(match[1]);
+            variable = match[2] || 'CONST';
+        } else {
+            coeff = (match[3] === '+') ? 1 : -1;
+            variable = match[4];
+        }
+        termMap.set(variable, (termMap.get(variable) || 0) + coeff);
+    });
+    
+    const groups = {};
+    termList.forEach(term => {
+        const match = term.match(/[a-zA-Z\^0-9]+$/);
+        const variable = match ? match[0] : 'CONST';
+        if (!groups[variable]) groups[variable] = [];
+        groups[variable].push(term);
+    });
+    const groupedString = Object.values(groups).map(g => `(${g.join(' ')})`).join(' + ');
+    stepsHtml.push(`<p><strong>Group Like Terms:</strong></p><p>$$${formatExpressionForJax(groupedString.replace(/^\s*\+\s*/, ''))}$$</p>`);
+    // --- Step 3: Final Answer ---
+    let finalParts = [];
+    const sortedKeys = Array.from(termMap.keys()).sort((a, b) => {
+        if (a === 'CONST') return 1; if (b === 'CONST') return -1;
+        if (a > b) return -1; if (b > a) return 1; return 0;
+    });
+    sortedKeys.forEach(variable => {
+        let coeff = termMap.get(variable);
+        if (Math.abs(coeff) < 1e-9) return;
+        if (variable === 'CONST') { finalParts.push(coeff); } 
+        else {
+            if (coeff === 1) finalParts.push(variable);
+            else if (coeff === -1) finalParts.push(`-${variable}`);
+            else finalParts.push(`${coeff}${variable}`);
+        }
+    });
+    let finalExpr = finalParts.join('+').replace(/\+-/g, '-');
+    if (finalExpr.startsWith('+')) finalExpr = finalExpr.substring(1);
+    stepsHtml.push(`<p><strong>Simplified Result:</strong></p><p class="final-answer">$$${formatExpressionForJax(finalExpr)}$$</p>`);
+    // --- Display ---
+    answerWrapper.innerHTML = stepsHtml.join('');
+    if (window.MathJax) MathJax.typesetPromise([answerWrapper]);
+}
+function runEquationSolver() {
+    const eqStr = document.getElementById('equation-input')?.value || '';
+    if (!eqStr.includes('=')) {
+        showMessage("Invalid equation: must contain an '=' sign.", true);
+        return;
+    }
+    const parseTerms = (exprStr) => {
+        const coeffs = { a: 0, b: 0, c: 0 }; // for ax^2 + bx + c
+        if (!exprStr) return coeffs;
+        let processed = exprStr.replace(/\s/g, '').replace(/\^/g, '**').replace(/-/g, '+-');
+        if (processed.startsWith('+')) processed = processed.substring(1);
+        const terms = processed.split('+');
+        
+        terms.forEach(term => {
+            if (term.includes('x**2')) {
+                const val = term.replace('x**2', '').replace('*', '');
+                coeffs.a += (val === '' || val === '+') ? 1 : (val === '-') ? -1 : parseFloat(val);
+            } else if (term.includes('x')) {
+                const val = term.replace('x', '').replace('*', '');
+                coeffs.b += (val === '' || val === '+') ? 1 : (val === '-') ? -1 : parseFloat(val);
+            } else if (term !== '') {
+                coeffs.c += parseFloat(term);
+            }
+        });
+        return coeffs;
+    };
+    
+    const [lhsStr, rhsStr] = eqStr.split('=');
+    const lhsCoeffs = parseTerms(lhsStr);
+    const rhsCoeffs = parseTerms(rhsStr);
+    const a = lhsCoeffs.a - rhsCoeffs.a;
+    const b = lhsCoeffs.b - rhsCoeffs.b;
+    const c = lhsCoeffs.c - rhsCoeffs.c;
+    if (isNaN(a) || isNaN(b) || isNaN(c)) {
+        showMessage("Could not parse the equation. Please check the format.", true);
+        return;
+    }
+    let html = `<p><strong>1. Standard Form</strong></p><p>Rearrange the equation to the form $ax^2+bx+c=0$:</p>`;
+    const formatTerm = (val, term) => {
+        if (Math.abs(val) < 1e-9) return '';
+        let sign = val > 0 ? '+' : '-';
+        val = Math.abs(val);
+        let num = (val === 1 && term !== '') ? '' : val.toFixed(4).replace(/\.?0+$/, '');
+        return ` ${sign} ${num}${term} `;
+    };
+    let standardForm = `${formatTerm(a, 'x^2')} ${formatTerm(b, 'x')} ${formatTerm(c, '')} = 0`;
+    standardForm = standardForm.replace(/\s+/g, ' ').trim();
+    if (standardForm.startsWith('+')) standardForm = standardForm.substring(1).trim();
+    html += `<p>$$${standardForm}$$</p>`;
+    
+    // Solve
+    if (Math.abs(a) < 1e-9) { // Linear Equation
+        html += `<p><strong>2. Solve Linear Equation</strong></p><p>This is a linear equation ($a=0$). We solve for $x$:</p>`;
+        if (Math.abs(b) < 1e-9) {
+            html += (Math.abs(c) < 1e-9) 
+                ? `<p class="final-answer">$$Infinite~Solutions$$</p><p>(0 = 0 is always true)</p>` 
+                : `<p class="final-answer">$$No~Solution$$</p><p>(${c.toFixed(2)} = 0 is false)</p>`;
+        } else {
+            const x = -c / b;
+            html += `<p>$$${b.toFixed(2)}x = ${-c.toFixed(2)}$$</p>`;
+            html += `<p>$$x = \\frac{${-c.toFixed(2)}}{${b.toFixed(2)}}$$</p>`;
+            html += `<p class="final-answer">$$x = ${x.toFixed(4).replace(/\.?0+$/, '')}$$</p>`;
+        }
+    } else { // Quadratic Equation
+        html += `<p><strong>2. Quadratic Formula</strong></p><p>Using $a=${a.toFixed(2)}, b=${b.toFixed(2)}, c=${c.toFixed(2)}$ in the quadratic formula:</p>`;
+        html += `<p>$$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$</p>`;
+        const discriminant = b*b - 4*a*c;
+        html += `<p>The discriminant is $b^2-4ac = ${discriminant.toFixed(4).replace(/\.?0+$/, '')}$.</p>`;
+        if (discriminant >= 0) {
+            const x1 = (-b + Math.sqrt(discriminant)) / (2*a);
+            const x2 = (-b - Math.sqrt(discriminant)) / (2*a);
+            html += `<p>The solutions are real:</p><p class="final-answer">$$x_1 = ${x1.toFixed(4).replace(/\.?0+$/, '')}$$</p>`;
+            if (Math.abs(x1 - x2) > 1e-9) {
+                 html += `<p class="final-answer">$$x_2 = ${x2.toFixed(4).replace(/\.?0+$/, '')}$$</p>`;
+            }
+        } else {
+            const realPart = -b / (2*a);
+            const imagPart = Math.sqrt(-discriminant) / (2*a);
+            html += `<p>The solutions are complex:</p>`;
+            html += `<p class="final-answer">$$x_1 = ${realPart.toFixed(4).replace(/\.?0+$/, '')} + ${Math.abs(imagPart).toFixed(4).replace(/\.?0+$/, '')}i$$</p>`;
+            html += `<p class="final-answer">$$x_2 = ${realPart.toFixed(4).replace(/\.?0+$/, '')} - ${Math.abs(imagPart).toFixed(4).replace(/\.?0+$/, '')}i$$</p>`;
+        }
+    }
+    
+    answerWrapper.innerHTML = html;
+    if(window.MathJax) MathJax.typesetPromise([answerWrapper]);
+}
+// --- DRAWING FUNCTIONS ---
+function drawGraphingGrid(pixelsPerUnit, centerX, centerY) {
+    ctx.strokeStyle = colors.grid;
+    ctx.lineWidth = 1;
+    for (let x = centerX; x < mathCanvas.width; x += pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, mathCanvas.height); ctx.stroke(); }
+    for (let x = centerX; x > 0; x -= pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, mathCanvas.height); ctx.stroke(); }
+    for (let y = centerY; y < mathCanvas.height; y += pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(mathCanvas.width, y); ctx.stroke(); }
+    for (let y = centerY; y > 0; y -= pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(mathCanvas.width, y); ctx.stroke(); }
+    
+    ctx.strokeStyle = colors.axis; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(mathCanvas.width, centerY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, mathCanvas.height); ctx.stroke();
+    ctx.font = '14px sans-serif'; ctx.fillStyle = colors.main;
+    const tickInterval = pixelsPerUnit > 75 ? 1 : pixelsPerUnit > 35 ? 2 : 5;
+    for(let i = -100; i < 100; i += tickInterval) {
+        if (i === 0) continue;
+        const xPos = centerX + i * pixelsPerUnit; const yPos = centerY - i * pixelsPerUnit;
+        if (xPos > 0 && xPos < mathCanvas.width) { ctx.fillText(i, xPos, centerY + 15); ctx.beginPath(); ctx.moveTo(xPos, centerY - 4); ctx.lineTo(xPos, centerY + 4); ctx.stroke(); }
+        if (yPos > 0 && yPos < mathCanvas.height) { ctx.fillText(i, centerX + 15, yPos); ctx.beginPath(); ctx.moveTo(centerX - 4, yPos); ctx.lineTo(centerX + 4, yPos); ctx.stroke(); }
+    }
+    ctx.fillText('0', centerX - 10, centerY + 15);
+}
+function drawScatterPlot() {
+    clearCanvas(mathCanvas, ctx);
+    const dataString = document.getElementById('scatter-data')?.value || '';
+    const data = parseScatterData(dataString);
+    if (data.length < 2) {
+        ctx.fillStyle = colors.label;
+        ctx.textAlign = 'center';
+        ctx.font = '18px sans-serif';
+        ctx.fillText("Please enter at least two valid data points.", mathCanvas.width / 2, mathCanvas.height / 2);
+        return;
+    }
+    const title = document.getElementById('scatter-title')?.value || 'Scatter Plot';
+    const xLabel = document.getElementById('scatter-x-label')?.value || 'X-Axis';
+    const yLabel = document.getElementById('scatter-y-label')?.value || 'Y-Axis';
+    const showBestFit = document.getElementById('show-best-fit')?.checked;
+    const padding = { top: 60, right: 40, bottom: 60, left: 80 };
+    const plotWidth = mathCanvas.width - padding.left - padding.right;
+    const plotHeight = mathCanvas.height - padding.top - padding.bottom;
+    const xVals = data.map(p => p.x);
+    const yVals = data.map(p => p.y);
+    const xMin = Math.min(...xVals), xMax = Math.max(...xVals);
+    const yMin = Math.min(...yVals), yMax = Math.max(...yVals);
+    const xRange = xMax - xMin || 1;
+    const yRange = yMax - yMin || 1;
+    const dataBounds = {
+        xMin: xMin - xRange * 0.1, xMax: xMax + xRange * 0.1,
+        yMin: yMin - yRange * 0.1, yMax: yMax + yRange * 0.1
+    };
+    const mapX = val => padding.left + ((val - dataBounds.xMin) / (dataBounds.xMax - dataBounds.xMin)) * plotWidth;
+    const mapY = val => padding.top + plotHeight - ((val - dataBounds.yMin) / (dataBounds.yMax - dataBounds.yMin)) * plotHeight;
+    
+    // Grid
+    ctx.strokeStyle = colors.grid;
+    ctx.lineWidth = 1;
+    const numGridLines = 5;
+    for (let i = 0; i <= numGridLines; i++) {
+        const x = padding.left + (plotWidth / numGridLines) * i;
+        ctx.beginPath(); ctx.moveTo(x, padding.top); ctx.lineTo(x, padding.top + plotHeight); ctx.stroke();
+        const y = padding.top + (plotHeight / numGridLines) * i;
+        ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + plotWidth, y); ctx.stroke();
+    }
+    // Axes
+    ctx.strokeStyle = colors.axis;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, padding.top + plotHeight); ctx.lineTo(padding.left + plotWidth, padding.top + plotHeight); ctx.stroke();
+    ctx.fillStyle = colors.main;
+    ctx.font = 'bold 24px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(title, mathCanvas.width / 2, padding.top / 2);
+    ctx.font = '18px sans-serif';
+    ctx.fillText(xLabel, padding.left + plotWidth / 2, mathCanvas.height - padding.bottom / 2 + 15);
+    ctx.save();
+    ctx.translate(padding.left / 2 - 15, padding.top + plotHeight / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(yLabel, 0, 0);
+    ctx.restore();
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    for (let i = 0; i <= 5; i++) {
+        const val = dataBounds.xMin + (dataBounds.xMax - dataBounds.xMin) * i / 5;
+        ctx.fillText(val.toFixed(1), mapX(val), padding.top + plotHeight + 5);
+    }
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+     for (let i = 0; i <= 5; i++) {
+        const val = dataBounds.yMin + (dataBounds.yMax - dataBounds.yMin) * i / 5;
+        ctx.fillText(val.toFixed(1), padding.left - 5, mapY(val));
+    }
+    ctx.fillStyle = colors.point;
+    data.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(mapX(p.x), mapY(p.y), 5, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    if (showBestFit) {
+        const { m, b, r2 } = calculateLinearRegression(data);
+        if (isFinite(m) && isFinite(b)) {
+            ctx.strokeStyle = colors.answer;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(mapX(dataBounds.xMin), mapY(m * dataBounds.xMin + b));
+            ctx.lineTo(mapX(dataBounds.xMax), mapY(m * dataBounds.xMax + b));
+            ctx.stroke();
+            const eqText = `y = ${m.toFixed(3)}x + ${b.toFixed(3)}`;
+            const r2Text = `R² = ${r2.toFixed(3)}`;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillRect(padding.left + 5, padding.top + 5, 200, 55);
+            ctx.fillStyle = colors.main;
+            ctx.font = 'bold 16px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(eqText, padding.left + 10, padding.top + 20);
+            ctx.fillText(r2Text, padding.left + 10, padding.top + 45);
+        }
+    }
+}
+function drawIrrationalExplorer() {
+    const parsed = parseNumberInput(document.getElementById('number-input')?.value || 'pi');
+    if (!parsed) {
+        textDisplayWrapper.innerHTML = `<p>$$Invalid~Input$$</p>`;
+        if(isAnswerToggledOn) answerWrapper.innerHTML = '<p>Invalid input.</p>';
+        return;
+    }
+    
+    const value = parsed.val;
+    const centerInt = Math.floor(value);
+    const min = centerInt - 1, max = centerInt + 1;
+    let svg = `<svg width="100%" height="150" viewBox="0 0 800 150">`;
+    svg += `<line x1="40" y1="75" x2="760" y2="75" stroke="${colors.axis}" stroke-width="2" />`;
+    const mapX = val => 40 + ((val - min) / (max - min)) * 720;
+    
+    for (let i = min; i <= max; i++) {
+        const x = mapX(i);
+        svg += `<line x1="${x}" y1="65" x2="${x}" y2="85" stroke="${colors.axis}" stroke-width="2" />`;
+        svg += `<text x="${x}" y="110" text-anchor="middle" font-size="24">${i}</text>`;
+    }
+    for (let i = min; i < max; i += 0.1) {
+       if (Math.round(i*10) % 10 !== 0) {
+            const x = mapX(i);
+            svg += `<line x1="${x}" y1="70" x2="${x}" y2="80" stroke="#a0aec0" stroke-width="1" />`;
+       }
+    }
+    const numberX = mapX(value);
+    svg += `<polygon points="${numberX-8},50 ${numberX+8},50 ${numberX},65" fill="${colors.answer}" />`;
+    svg += `</svg>`;
+    textDisplayWrapper.innerHTML = `<p>Where is $${parsed.symbol}$ on the number line?</p>${svg}`;
+    if (isAnswerToggledOn) {
+        answerWrapper.innerHTML = `
+            <p class="final-answer" style="text-align: center;">$$${parsed.symbol} \\approx ${value.toFixed(15)}$$</p>
+            <p style="text-align: center;">Type: ${parsed.type}</p>
+        `;
+    }
+    if(window.MathJax) MathJax.typesetPromise([answerWrapper, textDisplayWrapper]);
+}
+function drawScientificNotationTool() {
+    const inputStr = document.getElementById('sci-num-input')?.value || '0';
+    let questionHtml = '';
+    let answerHtml = '';
+    const parseSci = (str) => {
+        str = str.replace(/\s/g, '').toLowerCase();
+        if (str.includes('e')) {
+            const parts = str.split('e');
+            if(parts.length === 2 && !isNaN(parseFloat(parts[0])) && !isNaN(parseInt(parts[1]))) {
+                 return { value: parseFloat(str) };
+            }
+        }
+        const val = parseFloat(str);
+        if (isNaN(val)) return null;
+        return { value: val };
+    };
+    const numInfo = parseSci(inputStr);
+    if (!numInfo) {
+        questionHtml = "<p>$$Invalid~Input$$</p>";
+        answerHtml = "";
+    } else {
+        const num = numInfo.value;
+        const standardStr = num.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
+        const sciParts = num.toExponential(4).split('e');
+        const coefficient = sciParts[0];
+        const exponent = sciParts[1];
+        const sciStr = `${coefficient} \\times 10^{${parseInt(exponent)}}`;
+        questionHtml = `
+            <p style="font-weight: bold;">$Standard~Form$</p>
+            <p>$$${standardStr}$$</p>
+        `;
+        answerHtml = `
+            <p style="font-weight: bold;">$Scientific~Notation$</p>
+            <p class="final-answer">$$${sciStr}$$</p>
+        `;
+    }
+    textDisplayWrapper.innerHTML = questionHtml;
+    if(isAnswerToggledOn) answerWrapper.innerHTML = answerHtml;
+    if(window.MathJax) MathJax.typesetPromise([answerWrapper, textDisplayWrapper]);
+}
+function drawFunctionExplorer() {
+    clearCanvas(mathCanvas, ctx);
+    const pixelsPerUnit = 40;
+    const centerX = mathCanvas.width / 2;
+    const centerY = mathCanvas.height / 2;
+    drawGraphingGrid(pixelsPerUnit, centerX, centerY);
+    const safeMath = { sin: Math.sin, cos: Math.cos, tan: Math.tan, abs: Math.abs, sqrt: Math.sqrt, pow: Math.pow, PI: Math.PI, E: Math.E };
+    const lines = Array.from(document.getElementById('equationLinesContainer').children);
+    lines.forEach((lineDiv) => {
+        const eqInput = lineDiv.querySelector('input[type="text"]');
+        const colorInput = lineDiv.querySelector('input[type="color"]');
+        if (!eqInput || !colorInput || eqInput.value.trim() === '') return;
+        const expr = eqInput.value.trim();
+        const color = colorInput.value;
+        try {
+            const func = new Function('x', ...Object.keys(safeMath), `return ${expr.replace(/\^/g, '**')}`);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            let firstPoint = true;
+            for(let px = 0; px < mathCanvas.width; px++) {
+                const x = (px - centerX) / pixelsPerUnit;
+                const y = func(x, ...Object.values(safeMath));
+                if (isFinite(y)) {
+                    const py = centerY - y * pixelsPerUnit;
+                    if(firstPoint) { ctx.moveTo(px, py); firstPoint = false; } else { ctx.lineTo(px, py); }
+                }
+            }
+            ctx.stroke();
+        } catch (e) { /* silent fail */ }
+    });
+    const tableContainer = document.getElementById('function-table-container');
+    const xValuesStr = document.getElementById('table-x-values').value;
+    const xValues = xValuesStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+    let tableHtml = '<table class="w-full text-base text-left"><thead><tr class="border-b"><th class="p-1 font-bold">$x$</th>';
+    lines.forEach((line, i) => { if(line.querySelector('input[type="text"]').value.trim()!=='') tableHtml += `<th class="p-1 font-bold" style="color:${line.querySelector('input[type="color"]').value};">$f_{${i+1}}(x)$</th>`});
+    tableHtml += '</tr></thead><tbody>';
+    xValues.forEach(x => {
+        tableHtml += '<tr class="border-b">';
+        tableHtml += `<td class="p-1 font-semibold">${x}</td>`;
+        lines.forEach(line => {
+             const expr = line.querySelector('input[type="text"]').value.trim();
+             if (expr !== '') {
+                try {
+                    const func = new Function('x', ...Object.keys(safeMath), `return ${expr.replace(/\^/g, '**')}`);
+                    const y = func(x, ...Object.values(safeMath));
+                    tableHtml += `<td class="p-1">${isFinite(y) ? y.toFixed(3) : 'undef'}</td>`;
+                } catch (e) {
+                    tableHtml += `<td class="p-1">error</td>`;
+                }
+             }
+        });
+        tableHtml += '</tr>';
+    });
+    tableHtml += '</tbody></table>';
+    tableContainer.innerHTML = tableHtml;
+    if (window.MathJax && window.MathJax.typesetPromise) { window.MathJax.typesetPromise([tableContainer]); }
+}
+function drawFunctionTransformationTool() {
+    clearCanvas(mathCanvas, ctx);
+    const pixelsPerUnit = 40;
+    const centerX = mathCanvas.width / 2;
+    const centerY = mathCanvas.height / 2;
+    drawGraphingGrid(pixelsPerUnit, centerX, centerY);
+    const parentFuncStr = document.getElementById('parent-function').value;
+    const a = parseFloat(document.getElementById('slider-a').value);
+    const b = parseFloat(document.getElementById('slider-b').value);
+    const h = parseFloat(document.getElementById('slider-h').value);
+    const k = parseFloat(document.getElementById('slider-k').value);
+    const showParent = document.getElementById('show-parent-func').checked;
+    const f = new Function('x', `return ${parentFuncStr}`);
+    const plotFunction = (func, color, width = 2, dashed = false) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        if (dashed) ctx.setLineDash([5, 5]);
+        else ctx.setLineDash([]);
+        ctx.beginPath();
+        let firstPoint = true;
+        for (let px = 0; px < mathCanvas.width; px++) {
+            const x = (px - centerX) / pixelsPerUnit;
+            const y = func(x);
+            if (isFinite(y)) {
+                const py = centerY - y * pixelsPerUnit;
+                if (firstPoint) { ctx.moveTo(px, py); firstPoint = false; } else { ctx.lineTo(px, py); }
+            }
+        }
+        ctx.stroke();
+    };
+    if (showParent) {
+        plotFunction(x => f(x), colors.parentFunc, 2, true);
+    }
+    if (b !== 0) {
+        plotFunction(x => a * f(b * (x - h)) + k, colors.answer, 3);
+    }
+}
+function drawSystemsOfEquations() {
+    clearCanvas(mathCanvas, ctx);
+    const pixelsPerUnit = 40;
+    const centerX = mathCanvas.width / 2;
+    const centerY = mathCanvas.height / 2;
+    drawGraphingGrid(pixelsPerUnit, centerX, centerY);
+    
+    const lines = Array.from(document.getElementById('equationLinesContainer').children);
+    const equations = [];
+    lines.forEach(lineDiv => {
+        const eqInput = lineDiv.querySelector('input[type="text"]');
+        const colorInput = lineDiv.querySelector('input[type="color"]');
+        const eqData = parseLinearEquation(eqInput.value);
+        if (eqData) {
+            equations.push({ ...eqData, color: colorInput.value });
+        }
+    });
+    equations.forEach(eq => {
+        ctx.strokeStyle = eq.color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        const y1 = eq.m * (-centerX / pixelsPerUnit) + eq.b;
+        const y2 = eq.m * ((mathCanvas.width - centerX) / pixelsPerUnit) + eq.b;
+        ctx.moveTo(0, centerY - y1 * pixelsPerUnit);
+        ctx.lineTo(mathCanvas.width, centerY - y2 * pixelsPerUnit);
+        ctx.stroke();
+    });
+    const solutionDisplay = document.getElementById('solution-display');
+    let solHtml = '';
+    if (equations.length >= 2) {
+        const eq1 = equations[0];
+        const eq2 = equations[1];
+        if (Math.abs(eq1.m - eq2.m) < 1e-9) { // Parallel or coinciding
+            if (Math.abs(eq1.b - eq2.b) < 1e-9) {
+                solHtml = '<h4 class="font-bold text-lg text-slate-800">$Infinite Solutions$</h4><p class="text-base">$The lines are coinciding.$</p>';
+            } else {
+                solHtml = '<h4 class="font-bold text-lg text-slate-800">$No Solution$</h4><p class="text-base">$The lines are parallel.$</p>';
+            }
+        } else {
+            const x = (eq2.b - eq1.b) / (eq1.m - eq2.m);
+            const y = eq1.m * x + eq1.b;
+            const canvasX = centerX + x * pixelsPerUnit;
+            const canvasY = centerY - y * pixelsPerUnit;
+            
+            ctx.fillStyle = colors.main;
+            ctx.beginPath();
+            ctx.arc(canvasX, canvasY, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            solHtml = `<h4 class="font-bold text-lg text-slate-800">$One Solution$</h4><p class="text-base">$Intersection: (${x.toFixed(2)}, ${y.toFixed(2)})$</p>`;
+        }
+    } else {
+        solHtml = '<p class="text-base">$Enter at least two equations to find a solution.$</p>';
+    }
+    solutionDisplay.innerHTML = solHtml;
+}
+function drawExponentRules() {
+    const expr = document.getElementById('exponent-expression')?.value.replace(/\*/g, ' * ') || '';
+    let questionHtml = `<p>$$Simplify: ${formatExpressionForJax(expr)}$$</p>`;
+    let answerHtml = '';
+    const expand = (base, exp) => Array(exp).fill(`(${base})`).join(' \\cdot ');
+    const cleanedExpr = expr.replace(/\s/g, '');
+    let match = cleanedExpr.match(/^([a-z0-9]+)\^(\d+)\*([a-z0-9]+)\^(\d+)$/);
+    if (match && match[1] === match[3]) {
+        const [_, base, exp1, __, exp2] = match.map(m => isNaN(parseInt(m)) ? m : parseInt(m));
+        answerHtml += `<p>$$${base}^${exp1} \\times ${base}^${exp2}$$</p>`;
+        answerHtml += `<p>Expand the terms:</p><p>$$= ${expand(base, exp1)} \\times ${expand(base, exp2)}$$</p>`;
+        answerHtml += `<p>Count the total bases:</p><p>$$= ${expand(base, exp1 + exp2)}$$</p>`;
+        answerHtml += `<p class="final-answer">Rewrite using the rule (add exponents):</p><p class="final-answer">$$= ${base}^{${exp1}+${exp2}} = \\mathbf{${base}^{${exp1 + exp2}}}$$</p>`;
+    }
+    else if ((match = cleanedExpr.match(/^([a-z0-9]+)\^(\d+)\/([a-z0-9]+)\^(\d+)$/)) && match[1] === match[3]) {
+        const [_, base, exp1, __, exp2] = match.map(m => isNaN(parseInt(m)) ? m : parseInt(m));
+        answerHtml += `<p>$$ \\frac{${base}^${exp1}}{${base}^${exp2}} $$</p>`;
+        answerHtml += `<p>Expand the terms:</p><p>$$ = \\frac{${Array(exp1).fill(base).join(' \\cdot ')}}{${Array(exp2).fill(base).join(' \\cdot ')}} $$</p>`;
+        const common = Math.min(exp1, exp2);
+        const top = Array(exp1).fill(base);
+        const bottom = Array(exp2).fill(base);
+        for(let i=0; i<common; i++) { top[i] = `\\cancel{${base}}`; bottom[i] = `\\cancel{${base}}`; }
+        answerHtml += `<p>Cancel common factors:</p><p>$$ = \\frac{${top.join(' \\cdot ')}}{${bottom.join(' \\cdot ')}} $$</p>`;
+        answerHtml += `<p class="final-answer">Rewrite using the rule (subtract exponents):</p><p class="final-answer">$$ = ${base}^{${exp1}-${exp2}} = \\mathbf{${base}^{${exp1-exp2}}} $$</p>`;
+    }
+    else if ((match = cleanedExpr.match(/^\(([a-z0-9]+)\^(\d+)\)\^(\d+)$/))) {
+        const [_, base, exp1, exp2] = match.map(m => isNaN(parseInt(m)) ? m : parseInt(m));
+        answerHtml += `<p>$$(${base}^${exp1})^${exp2}$$</p>`;
+        answerHtml += `<p>Expand the outer exponent:</p><p>$$= ${Array(exp2).fill(`(${base}^${exp1})`).join(' \\cdot ')}$$</p>`;
+        answerHtml += `<p>Expand all terms:</p><p>$$= ${Array(exp2).fill(expand(base, exp1)).join(' \\cdot ')}$$</p>`;
+        answerHtml += `<p class="final-answer">Rewrite using the rule (multiply exponents):</p><p class="final-answer">$$= ${base}^{${exp1} \\times ${exp2}} = \\mathbf{${base}^{${exp1*exp2}}}$$</p>`;
+    }
+    else {
+        answerHtml = `<p>$$Invalid~or~unsupported~expression~format.$$</p>`;
+    }
+    textDisplayWrapper.innerHTML = questionHtml;
+    if(isAnswerToggledOn) answerWrapper.innerHTML = answerHtml;
+    if(window.MathJax) MathJax.typesetPromise([answerWrapper, textDisplayWrapper]);
+}
+function drawLinearEquationFromData() {
+    clearCanvas(mathCanvas, ctx);
+    const pixelsPerUnit = 40;
+    const centerX = mathCanvas.width / 2;
+    const centerY = mathCanvas.height / 2;
+    const mapToCanvas = ({x, y}) => ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });
+    drawGraphingGrid(pixelsPerUnit, centerX, centerY);
+    const dataString = document.getElementById('scatter-data')?.value || '';
+    const data = parseScatterData(dataString);
+    
+    ctx.fillStyle = colors.point;
+    data.forEach(p => {
+        const canvasP = mapToCanvas(p);
+        ctx.beginPath();
+        ctx.arc(canvasP.x, canvasP.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    const showBestFit = document.getElementById('show-best-fit')?.checked;
+    if (showBestFit && data.length >= 2) {
+        const { m, b } = calculateLinearRegression(data);
+        if (isFinite(m) && isFinite(b)) {
+            const p1 = { x: -100, y: m * -100 + b };
+            const p2 = { x: 100, y: m * 100 + b };
+            const canvasP1 = mapToCanvas(p1);
+            const canvasP2 = mapToCanvas(p2);
+            ctx.strokeStyle = colors.answer;
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(canvasP1.x, canvasP1.y);
+            ctx.lineTo(canvasP2.x, canvasP2.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+    }
+    const canvasP1 = mapToCanvas(manualLinePoint1);
+    const canvasP2 = mapToCanvas(manualLinePoint2);
+    ctx.strokeStyle = colors.manualLine;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(canvasP1.x, canvasP1.y);
+    ctx.lineTo(canvasP2.x, canvasP2.y);
+    ctx.stroke();
+    [canvasP1, canvasP2].forEach(p => {
+        ctx.fillStyle = colors.manualLine;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+    const manualEqDiv = document.getElementById('manual-line-eq');
+    const m_manual = (manualLinePoint2.x - manualLinePoint1.x) === 0 ? Infinity : (manualLinePoint2.y - manualLinePoint1.y) / (manualLinePoint2.x - manualLinePoint1.x);
+    const b_manual = manualLinePoint1.y - m_manual * manualLinePoint1.x;
+    manualEqDiv.innerHTML = `<span>$y = ${m_manual.toFixed(2)}x ${b_manual >= 0 ? '+' : '-'} ${Math.abs(b_manual).toFixed(2)}$</span>`;
+    const predX = parseFloat(document.getElementById('prediction-x').value);
+    const predYDiv = document.getElementById('prediction-y');
+    let predHtml = '';
+    if (!isNaN(predX)) {
+        predHtml += `<p>Manual: $y = ${ (m_manual * predX + b_manual).toFixed(2)}$</p>`;
+        if(showBestFit && data.length >= 2) {
+            const {m, b} = calculateLinearRegression(data);
+            if(isFinite(m)) predHtml += `<p>Calculated: $y = ${(m * predX + b).toFixed(2)}$</p>`;
+        }
+    }
+    predYDiv.innerHTML = predHtml;
+}
+function drawCongruenceSimilarity() {
+    clearCanvas(mathCanvas, ctx);
+    const pixelsPerUnit = 40;
+    const centerX = mathCanvas.width / 2;
+    const centerY = mathCanvas.height / 2;
+    drawGraphingGrid(pixelsPerUnit, centerX, centerY);
+    const targetShape = [{x: 4, y: 1}, {x: 7, y: 1}, {x: 5.5, y: 4}];
+    const baseShape = [{x: -6, y: -4}, {x: -3, y: -4}, {x: -4.5, y: -1}];
+    const tx = parseFloat(document.getElementById('slider-tx').value);
+    const ty = parseFloat(document.getElementById('slider-ty').value);
+    const rot = parseFloat(document.getElementById('slider-rot').value) * Math.PI / 180;
+    const scale = parseFloat(document.getElementById('slider-scale').value);
+    const transformPoint = (p) => {
+        let newX = p.x * scale;
+        let newY = p.y * scale;
+        let rotatedX = newX * Math.cos(rot) - newY * Math.sin(rot);
+        let rotatedY = newX * Math.sin(rot) + newY * Math.cos(rot);
+        return { x: rotatedX + tx, y: rotatedY + ty };
+    };
+    const transformedShape = baseShape.map(transformPoint);
+    const drawPolygon = (points, color, stroke = true) => {
+        ctx.fillStyle = color;
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const p0_canvas = {x: centerX + points[0].x * pixelsPerUnit, y: centerY - points[0].y * pixelsPerUnit};
+        ctx.moveTo(p0_canvas.x, p0_canvas.y);
+        for(let i = 1; i < points.length; i++) {
+            const pi_canvas = {x: centerX + points[i].x * pixelsPerUnit, y: centerY - points[i].y * pixelsPerUnit};
+            ctx.lineTo(pi_canvas.x, pi_canvas.y);
+        }
+        ctx.closePath();
+        ctx.globalAlpha = 0.6;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+        if(stroke) ctx.stroke();
+    };
+    drawPolygon(targetShape, colors.targetShape);
+    drawPolygon(transformedShape, colors.primaryBlue);
+    const checkResultDiv = document.getElementById('check-result');
+    let distSq = (p1, p2) => (p1.x-p2.x)**2 + (p1.y-p2.y)**2;
+    let matchCount = 0;
+    const tolerance = 0.1;
+    for(const p1 of transformedShape) {
+        for(const p2 of targetShape) {
+            if(distSq(p1, p2) < tolerance) {
+                matchCount++;
+                break;
+            }
+        }
+    }
+    if (matchCount === targetShape.length) {
+        if(Math.abs(scale - 1) < 0.05) checkResultDiv.innerHTML = "$Congruent!$";
+        else checkResultDiv.innerHTML = "$Similar!$";
+    } else {
+        checkResultDiv.innerHTML = "$Not~yet...$";
+    }
+}
+function drawInteractiveCoordinatePlane() {
+    clearCanvas(mathCanvas, ctx);
+    const pixelsPerUnit = 40;
+    const centerX = mathCanvas.width / 2;
+    const centerY = mathCanvas.height / 2;
+    drawGraphingGrid(pixelsPerUnit, centerX, centerY);
+    const mapToCanvas = ({x, y}) => ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });
+    const objectListDiv = document.getElementById('objects-list');
+    let listHtml = '';
+    plottedObjects.forEach((obj, index) => {
+        if (obj.type === 'point') {
+            const p_canvas = mapToCanvas(obj);
+            ctx.fillStyle = colors.point;
+            ctx.beginPath();
+            ctx.arc(p_canvas.x, p_canvas.y, 6, 0, Math.PI*2);
+            ctx.fill();
+            listHtml += `<div class="flex items-center justify-between p-1"><span>$Point: (${obj.x.toFixed(2)}, ${obj.y.toFixed(2)})$</span><button data-index="${index}" class="remove-object-btn remove-line-button">×</button></div>`;
+        } else if (obj.type === 'line') {
+             const p1_canvas = mapToCanvas(obj.p1);
+             const p2_canvas = mapToCanvas(obj.p2);
+             ctx.strokeStyle = obj.color || colors.answer;
+             ctx.lineWidth = 2.5;
+             ctx.beginPath();
+             ctx.moveTo(p1_canvas.x, p1_canvas.y);
+             ctx.lineTo(p2_canvas.x, p2_canvas.y);
+             ctx.stroke();
+             listHtml += `<div class="flex items-center justify-between p-1"><span>$Line: (${obj.p1.x.toFixed(1)}, ${obj.p1.y.toFixed(1)}) \\to (${obj.p2.x.toFixed(1)}, ${obj.p2.y.toFixed(1)})$</span><button data-index="${index}" class="remove-object-btn remove-line-button">×</button></div>`;
+        }
+    });
+    if (snapIndicatorPos) {
+        ctx.fillStyle = 'rgba(150, 150, 150, 0.5)';
+        ctx.beginPath();
+        ctx.arc(snapIndicatorPos.x, snapIndicatorPos.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    objectListDiv.innerHTML = listHtml;
+    document.querySelectorAll('.remove-object-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            plottedObjects.splice(parseInt(e.target.dataset.index), 1);
+            handleDraw();
+        };
+    });
+}
+function drawDataSetAnalyzer() {
+    clearCanvas(mathCanvas, ctx);
+    if (analysisResults) {
+        const { minVal, q1, median, q3, maxVal } = analysisResults;
+        const padding = { top: 40, right: 40, bottom: 60, left: 40 };
+        const plotWidth = mathCanvas.width - padding.left - padding.right;
+        const y = mathCanvas.height / 2;
+        const dataRange = maxVal - minVal === 0 ? 1 : maxVal - minVal;
+        const mapX = val => padding.left + ((val - minVal) / dataRange) * plotWidth;
+        const tickValues = [minVal, q1, median, q3, maxVal];
+        ctx.strokeStyle = colors.grid; ctx.lineWidth = 1;
+        tickValues.forEach(val => {
+            const x = mapX(val);
+            ctx.beginPath(); ctx.moveTo(x, padding.top); ctx.lineTo(x, mathCanvas.height - padding.bottom); ctx.stroke();
+        });
+        ctx.strokeStyle = colors.axis; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(mapX(minVal), y); ctx.lineTo(mapX(q1), y); ctx.moveTo(mapX(q3), y); ctx.lineTo(mapX(maxVal), y); ctx.stroke();
+        ctx.fillStyle = 'rgba(43, 109, 254, 0.5)';
+        ctx.fillRect(mapX(q1), y - 30, mapX(q3) - mapX(q1), 60);
+        ctx.strokeRect(mapX(q1), y - 30, mapX(q3) - mapX(q1), 60);
+        ctx.strokeStyle = colors.answer; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(mapX(median), y - 30); ctx.lineTo(mapX(median), y + 30); ctx.stroke();
+        ctx.fillStyle = colors.main; ctx.font = '16px sans-serif'; ctx.textAlign = 'center';
+        tickValues.forEach(val => { ctx.fillText(val.toFixed(2), mapX(val), y + 50); });
+        ctx.font = '14px sans-serif';
+        ctx.fillText("Min", mapX(minVal), y - 40); ctx.fillText("Q1", mapX(q1), y - 40);
+        ctx.fillText("Median", mapX(median), y - 40);
+        ctx.fillText("Q3", mapX(q3), y - 40);
+        ctx.fillText("Max", mapX(maxVal), y - 40);
+    } else {
+        textDisplayWrapper.innerHTML = `<p class="text-xl text-center text-slate-500">Enter data and toggle Answer to see results.</p>`;
+    }
+}
+function drawProbabilitySimulator() {
+    if (!simulationResults) {
+        textDisplayWrapper.innerHTML = `<p class="text-xl text-center text-slate-500">Choose simulation type, number of trials, and toggle Answer.</p>`;
+        return;
+    }
+    const { counts, trials, outcomes, simType } = simulationResults;
+    let html = `<h4 class="font-bold text-xl text-slate-800">Simulation Results (${trials.toLocaleString()} Trials)</h4>`;
+    const theoreticalProbs = {
+        sum2d6: { '2': 1/36, '3': 2/36, '4': 3/36, '5': 4/36, '6': 5/36, '7': 6/36, '8': 5/36, '9': 4/36, '10': 3/36, '11': 2/36, '12': 1/36},
+        twoCoins: { 'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25 },
+        coinAndDice: {}
+    };
+    outcomes.filter(o => o.startsWith('H') || o.startsWith('T')).forEach(o => theoreticalProbs.coinAndDice[o] = 1/12);
+    html += `<table class="w-full text-left text-base sm:text-lg mt-4"><thead><tr class="border-b-2"><th class="p-2">Outcome</th><th class="p-2">Count</th><th class="p-2">Experimental P(x)</th><th class="p-2">Theoretical P(x)</th></tr></thead><tbody>`;
+    for (const outcome of outcomes) {
+        const count = counts[outcome] || 0;
+        const experimentalProb = trials > 0 ? count / trials : 0;
+        let theoreticalProb = 0;
+        if (theoreticalProbs[simType]) {
+            theoreticalProb = theoreticalProbs[simType][outcome] || 0;
+        } else {
+            theoreticalProb = (1 / outcomes.length);
+        }
+        html += `<tr class="border-b"><td class="p-2 font-bold">${outcome}</td><td class="p-2">${count.toLocaleString()}</td><td class="p-2">${(experimentalProb * 100).toFixed(2)}%</td><td class="p-2">${(theoreticalProb * 100).toFixed(2)}%</td></tr>`;
+    }
+    html += `</tbody></table>`;
+    answerWrapper.innerHTML = html;
+}
+function drawGeometricSeriesVisualizer() {
+    clearCanvas(mathCanvas, ctx);
+    const a = parseFloat(document.getElementById('slider-a').value);
+    const r = parseFloat(document.getElementById('slider-r').value);
+    const numTerms = parseInt(document.getElementById('series-terms').value);
+    if(numTerms <= 0) return;
+    const terms = [];
+    let partialSum = 0;
+    for (let i = 0; i < numTerms; i++) {
+        const termValue = a * Math.pow(r, i);
+        if(!isFinite(termValue)) break;
+        terms.push(termValue);
+        partialSum += termValue;
+    }
+    if (terms.length === 0) return;
+    const padding = { top: 40, right: 40, bottom: 60, left: 60 };
+    const plotWidth = mathCanvas.width - padding.left - padding.right;
+    const plotHeight = mathCanvas.height - padding.top - padding.bottom;
+    const maxAbsTerm = Math.max(...terms.map(Math.abs), Math.abs(a));
+    const yMax = maxAbsTerm * 1.2 || 1;
+    const yMin = -yMax;
+    const yRange = yMax - yMin;
+    const mapX = termIndex => padding.left + ((termIndex + 0.5) / numTerms) * plotWidth;
+    const mapY = val => (mathCanvas.height - padding.bottom) - ((val - yMin) / yRange) * plotHeight;
+    const barWidth = (plotWidth / numTerms) * 0.8;
+    const zeroY = mapY(0);
+    ctx.strokeStyle = colors.grid; ctx.lineWidth = 1;
+    for (let i = 0; i <= 10; i++) { ctx.beginPath(); const y = padding.top + i * plotHeight / 10; ctx.moveTo(padding.left, y); ctx.lineTo(mathCanvas.width - padding.right, y); ctx.stroke(); }
+    for (let i = 0; i < numTerms; i++) { ctx.beginPath(); const x = mapX(i); ctx.moveTo(x, padding.top); ctx.lineTo(x, mathCanvas.height - padding.bottom); ctx.stroke(); }
+    ctx.strokeStyle = colors.axis; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(padding.left, zeroY); ctx.lineTo(mathCanvas.width - padding.right, zeroY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, mathCanvas.height - padding.bottom); ctx.stroke();
+    
+    terms.forEach((term, i) => {
+        ctx.fillStyle = term >= 0 ? colors.primaryBlue : colors.negativeTerm;
+        const x = mapX(i) - barWidth / 2;
+        const y = term >= 0 ? mapY(term) : zeroY;
+        const height = Math.abs(mapY(term) - zeroY);
+        ctx.fillRect(x, y, barWidth, height);
+    });
+    
+    let resultText = `<p>$S_{${numTerms}} = ${partialSum.toPrecision(4)}$$</p>`;
+    const isConvergent = Math.abs(r) < 1;
+    if (isConvergent) {
+        const sumToInfinity = a / (1 - r);
+        const sumY = mapY(sumToInfinity);
+        ctx.strokeStyle = colors.answer; ctx.lineWidth = 2.5; ctx.setLineDash([8, 8]);
+        ctx.beginPath(); ctx.moveTo(padding.left, sumY); ctx.lineTo(mathCanvas.width - padding.right, sumY); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = colors.answer; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText(`Sum to Infinity: ${sumToInfinity.toFixed(3)}`, padding.left + 5, sumY - 5);
+        resultText += `<p>Converges to $S_\\infty = \\frac{a}{1-r} = ${sumToInfinity.toPrecision(4)}$</p>`;
+    } else {
+        resultText += `<p>Series Diverges (since $|r| \\ge 1$)</p>`;
+    }
+    document.getElementById('series-results').innerHTML = resultText;
+    
+    ctx.fillStyle = colors.main; ctx.font = '14px sans-serif'; ctx.textAlign = 'right';
+    for (let i = 0; i <= 10; i++) { const val = yMin + (yRange * i / 10); ctx.fillText(val.toFixed(1), padding.left - 5, mapY(val)); }
+    ctx.textAlign = 'center';
+    for (let i = 0; i < numTerms; i++) { if(numTerms <= 20 || i % Math.floor(numTerms/10) === 0) { ctx.fillText(i + 1, mapX(i), zeroY + 20); } }
+    ctx.fillText("Term (n)", padding.left + plotWidth/2, mathCanvas.height - 15);
+}
+function drawExpressionSimplifier() {
+    const expr = document.getElementById('algebraic-expression')?.value || '';
+    if (expr) {
+        textDisplayWrapper.innerHTML = `<p>$$${formatExpressionForJax(expr)}$$</p>`;
+    } else {
+        textDisplayWrapper.innerHTML = `<p class="text-xl text-center text-slate-500">Enter an expression and toggle Answer.</p>`;
+    }
+    if (isAnswerToggledOn) runSimplification();
+}
+function drawEquationSolver() {
+    const eq = document.getElementById('equation-input')?.value || '';
+    if (eq) {
+        textDisplayWrapper.innerHTML = `<p>$$${formatExpressionForJax(eq.replace(/\^/g, '**'))}$$</p>`;
+    } else {
+        textDisplayWrapper.innerHTML = `<p class="text-xl text-center text-slate-500">Enter an equation and toggle Answer.</p>`;
+    }
+    if (isAnswerToggledOn) runEquationSolver();
+}
+// --- MAIN CONTROL FUNCTIONS ---
+function handleAnswerToggle() {
+    isAnswerToggledOn = !isAnswerToggledOn;
+    updateAnswerToggleVisuals();
+    if (isAnswerToggledOn) runCurrentModeCalculation();
+    else answerWrapper.classList.add('hidden');
+}
+function resetAnswerToggle() {
+    if (isAnswerToggledOn) {
+        isAnswerToggledOn = false;
+        updateAnswerToggleVisuals();
+        answerWrapper.classList.add('hidden');
+    }
+}
+function updateAnswerToggleVisuals() {
+    if (!answerToggleBtn || !answerToggleDot) return;
+    answerToggleBtn.classList.toggle('toggle-on', isAnswerToggledOn);
+    answerToggleBtn.classList.toggle('toggle-off', !isAnswerToggledOn);
+    answerToggleDot.classList.toggle('dot-on', isAnswerToggledOn);
+}
+function runCurrentModeCalculation() {
+    answerWrapper.classList.remove('hidden');
+    switch (currentMode) {
+        case 'probabilitySimulator': runSimulation(); break;
+        case 'dataSetAnalyzer': runDataSetAnalysis(); break;
+        case 'expressionSimplifier': runSimplification(); break;
+        case 'equationSolver': runEquationSolver(); break;
+        case 'exponentRules':
+        case 'scientificNotation':
+        case 'irrationalExplorer':
+            handleDraw();
+            break;
+    }
+}
+function handleModeChange() {
+    plottedObjects = []; draggingPoint = null; 
+    analysisResults = null; simulationResults = null;
+    currentMode = modeSelector.value;
+    resetAnswerToggle();
+    setupInputsForMode(currentMode, false);
+    setTimeout(handleDraw, 310);
+}
+// **** THE FIX IS IN THESE TWO FUNCTIONS ****
+function setupInputsForMode(mode, shouldDraw = true) {
+    answerWrapper.classList.add('hidden');
+    const isTopRowMode = topRowInputModes.includes(mode);
+    // Reset layout to a predictable, visible state before applying mode-specific changes.
+    mainControls.classList.remove('hidden');
+    inputsPanel.classList.remove('panel-hidden');
+    displayWrapper.classList.remove('canvas-expanded');
+    menuToggleBtn.classList.add('toggle-on');
+    menuToggleBtn.classList.remove('toggle-off');
+    menuToggleDot.classList.add('dot-on');
+    
+    if (isTopRowMode) {
+        // --- Configure for a mode with NO side panel ---
+        inputsPanel.innerHTML = '';
+        topInputContainer.innerHTML = topRowInputTemplates[mode] || '';
+        answerToggleWrapper.classList.remove('hidden');
+        displayWrapper.classList.add('display-shrunken');
+        // This mode should be full width by default.
+        inputsPanel.classList.add('panel-hidden'); 
+        displayWrapper.classList.add('canvas-expanded'); 
+        contentWrapper.style.gap = '0';
+    } else {
+        // --- Configure for a mode WITH a side panel ---
+        inputsPanel.innerHTML = panelInputTemplates[mode] || '';
+        topInputContainer.innerHTML = '';
+        answerToggleWrapper.classList.add('hidden');
+        displayWrapper.classList.remove('display-shrunken');
+        
+        // This mode is split-screen by default.
+        contentWrapper.style.gap = '1rem';
+    }
+    const isCanvasMode = !textBasedModes.includes(mode) || mode === 'dataSetAnalyzer';
+    mathCanvas.classList.toggle('hidden', !isCanvasMode);
+    textDisplayWrapper.classList.toggle('hidden', isCanvasMode);
+    document.querySelectorAll('input, textarea, select').forEach(el => {
+        el.addEventListener('input', () => {
+             resetAnswerToggle();
+             handleDraw();
+        });
+    });
+    
+    if (!isTopRowMode) {
+         if (mode === 'functionExplorer' || mode === 'systemsOfEquations') {
+            const addBtnId = mode === 'functionExplorer' ? 'add-function-btn' : 'add-equation-btn';
+            const addEquation = (eqValue = '') => {
+                const container = document.getElementById('equationLinesContainer');
+                if (!container) return;
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'flex items-center gap-2 w-full';
+                const color = defaultLineColors[nextLineColorIndex++ % defaultLineColors.length];
+                const placeholder = mode === 'functionExplorer' ? 'e.g., x**2' : 'e.g., y=2x-1';
+                lineDiv.innerHTML = `<input type="text" placeholder="${placeholder}" class="flex-grow p-1 border-2 rounded-lg text-base" value="${eqValue}"><input type="color" value="${color}" class="w-8 h-8 rounded-md"><button type="button" class="remove-line-button">×</button>`;
+                lineDiv.querySelectorAll('input').forEach(i => i.addEventListener('input', handleDraw));
+                lineDiv.querySelector('.remove-line-button').addEventListener('click', () => { lineDiv.remove(); handleDraw(); });
+                container.appendChild(lineDiv);
+            };
+            document.getElementById(addBtnId).onclick = () => addEquation();
+            if (mode === 'functionExplorer') { addEquation('x**2'); } 
+            else { addEquation('y=2x+1'); addEquation('y=-x+4'); }
+        } else if (mode === 'interactiveCoordinatePlane') {
+            plottedObjects = [{ type: 'point', x: 2, y: 3 }];
+        } else if (mode === 'functionTransformation' || mode === 'congruenceSimilarity' || mode === 'geometricSeries') {
+            const sliderParams = {'functionTransformation': ['a', 'b', 'h', 'k'], 'congruenceSimilarity': ['tx', 'ty', 'rot', 'scale'], 'geometricSeries': ['a', 'r']};
+            sliderParams[mode].forEach(param => {
+                const slider = document.getElementById(`slider-${param}`);
+                const label = document.getElementById(`label-${param}`);
+                slider.addEventListener('input', () => {
+                    label.innerHTML = `$${slider.value}${param === 'rot' ? '°' : ''}$`;
+                    if (window.MathJax) MathJax.typesetPromise();
+                    handleDraw();
+                });
+            });
+        }
+    }
+    
+    if (shouldDraw) handleDraw();
+}
+function handleDraw() {
+    const parent = mathCanvas.parentElement;
+    if (parent && (mathCanvas.width !== parent.clientWidth || mathCanvas.height !== parent.clientHeight)) {
+        mathCanvas.width = parent.clientWidth;
+        mathCanvas.height = parent.clientHeight;
+    }
+    
+    switch (currentMode) {
+        case 'scatterPlotBestFit': drawScatterPlot(); break;
+        case 'irrationalExplorer': drawIrrationalExplorer(); break;
+        case 'scientificNotation': drawScientificNotationTool(); break;
+        case 'functionExplorer': drawFunctionExplorer(); break;
+        case 'functionTransformation': drawFunctionTransformationTool(); break;
+        case 'systemsOfEquations': drawSystemsOfEquations(); break;
+        case 'exponentRules': drawExponentRules(); break;
+        case 'linearEquationFromData': drawLinearEquationFromData(); break;
+        case 'congruenceSimilarity': drawCongruenceSimilarity(); break;
+        case 'interactiveCoordinatePlane': drawInteractiveCoordinatePlane(); break;
+        case 'dataSetAnalyzer': drawDataSetAnalyzer(); break;
+        case 'probabilitySimulator': drawProbabilitySimulator(); break;
+        case 'geometricSeries': drawGeometricSeriesVisualizer(); break;
+        case 'expressionSimplifier': drawExpressionSimplifier(); break;
+        case 'equationSolver': drawEquationSolver(); break;
+    }
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([document.body]).catch(console.error);
+    }
+}
+// --- EVENT LISTENERS ---
+document.addEventListener('DOMContentLoaded', () => {
+    modeSelector.value = 'equationSolver';
+    currentMode = 'equationSolver';
+    modeSelector.addEventListener('change', handleModeChange);
+    window.addEventListener('resize', () => { setTimeout(handleDraw, 150); });
+    answerToggleBtn.addEventListener('click', handleAnswerToggle);
+    menuToggleBtn.addEventListener('click', () => {
+        const isCurrentlyOn = menuToggleBtn.classList.contains('toggle-on');
+        const isTopRowMode = topRowInputModes.includes(currentMode);
+        if (isTopRowMode) {
+            // In a top-row mode, the toggle ONLY hides the main controls.
+            // It does NOT touch the display wrapper's width.
+            mainControls.classList.toggle('hidden', isCurrentlyOn);
+        } else {
+            // In a panel mode, the toggle hides the side panel and expands the display.
+            inputsPanel.classList.toggle('panel-hidden', isCurrentlyOn);
+            displayWrapper.classList.toggle('canvas-expanded', isCurrentlyOn);
+            contentWrapper.style.gap = isCurrentlyOn ? '0' : '1rem';
+        }
+        
+        // This part is the same for both scenarios: just update the button's visual state.
+        menuToggleBtn.classList.toggle('toggle-on', !isCurrentlyOn);
+        menuToggleBtn.classList.toggle('toggle-off', isCurrentlyOn);
+        menuToggleDot.classList.toggle('dot-on', !isCurrentlyOn);
+        setTimeout(() => { handleDraw(); }, 310);
+    });
+    
+    mathCanvas.addEventListener('mousedown', (e) => {
+        const rect = mathCanvas.getBoundingClientRect();
+        const mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        const pixelsPerUnit = 40;
+        const centerX = mathCanvas.width / 2;
+        const centerY = mathCanvas.height / 2;
+        const mapToCanvas = ({x, y}) => ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });
+        const mapFromCanvas = ({x, y}) => ({ x: (x - centerX) / pixelsPerUnit, y: (centerY - y) / pixelsPerUnit });
+        
+        if (currentMode === 'linearEquationFromData') {
+            const p1Canvas = mapToCanvas(manualLinePoint1);
+            const p2Canvas = mapToCanvas(manualLinePoint2);
+            if (Math.hypot(mousePos.x - p1Canvas.x, mousePos.y - p1Canvas.y) < 15) draggingPoint = 'p1';
+            else if (Math.hypot(mousePos.x - p2Canvas.x, mousePos.y - p2Canvas.y) < 15) draggingPoint = 'p2';
+        } else if (currentMode === 'interactiveCoordinatePlane') {
+            currentTool = document.querySelector('input[name="coord-tool"]:checked').value;
+            const mathMousePos = snappedMathPos || mapFromCanvas(mousePos);
+            
+            if (currentTool === 'plotPoint') {
+                plottedObjects.push({ type: 'point', ...mathMousePos });
+                handleDraw();
+            } else if (currentTool === 'drawLine') {
+                isDrawingLine = true;
+                lineStartPoint = mathMousePos;
+            }
+        }
+    });
+    mathCanvas.addEventListener('mousemove', (e) => {
+        const rect = mathCanvas.getBoundingClientRect();
+        const mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        const pixelsPerUnit = 40;
+        const centerX = mathCanvas.width / 2;
+        const centerY = mathCanvas.height / 2;
+        const mapToCanvas = ({x, y}) => ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });
+        const mapFromCanvas = ({x, y}) => ({ x: (x - centerX) / pixelsPerUnit, y: (centerY - y) / pixelsPerUnit });
+        let needsRedraw = false;
+        if (currentMode === 'interactiveCoordinatePlane') {
+            const mathMousePos = mapFromCanvas(mousePos);
+            const snappedX = Math.round(mathMousePos.x);
+            const snappedY = Math.round(mathMousePos.y);
+            let oldSnap = snapIndicatorPos;
+            if (Math.hypot(mapToCanvas(mathMousePos).x - mapToCanvas({x:snappedX, y:snappedY}).x, mapToCanvas(mathMousePos).y - mapToCanvas({x:snappedX, y:snappedY}).y) < 10) {
+                snappedMathPos = { x: snappedX, y: snappedY };
+                snapIndicatorPos = mapToCanvas(snappedMathPos);
+            } else {
+                snappedMathPos = null;
+                snapIndicatorPos = null;
+            }
+            if(oldSnap !== snapIndicatorPos) needsRedraw = true;
+        }
+        if (draggingPoint && currentMode === 'linearEquationFromData') {
+            const mathMousePos = mapFromCanvas(mousePos);
+            if (draggingPoint === 'p1') manualLinePoint1 = mathMousePos;
+            else if (draggingPoint === 'p2') manualLinePoint2 = mathMousePos;
+            needsRedraw = true;
+        } else if (isDrawingLine && currentMode === 'interactiveCoordinatePlane') {
+            handleDraw(); // Redraw base objects first
+            const startCanvas = mapToCanvas(lineStartPoint);
+            const endCanvas = snapIndicatorPos || mousePos;
+            ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.setLineDash([5,5]);
+            ctx.beginPath(); ctx.moveTo(startCanvas.x, startCanvas.y); ctx.lineTo(endCanvas.x, endCanvas.y); ctx.stroke();
+            ctx.setLineDash([]);
+        } else if (needsRedraw) {
+            handleDraw();
+        }
+    });
+    mathCanvas.addEventListener('mouseup', (e) => {
+        const rect = mathCanvas.getBoundingClientRect();
+        const mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        const pixelsPerUnit = 40;
+        const centerX = mathCanvas.width / 2;
+        const centerY = mathCanvas.height / 2;
+        const mapFromCanvas = ({x, y}) => ({ x: (x - centerX) / pixelsPerUnit, y: (centerY - y) / pixelsPerUnit });
+        if (draggingPoint) draggingPoint = null;
+        if (isDrawingLine && currentMode === 'interactiveCoordinatePlane') {
+            const lineEndPoint = snappedMathPos || mapFromCanvas(mousePos);
+            const color = defaultLineColors[nextLineColorIndex++ % defaultLineColors.length];
+            if (Math.hypot(lineEndPoint.x - lineStartPoint.x, lineEndPoint.y - lineStartPoint.y) > 0.1) {
+                plottedObjects.push({ type: 'line', p1: lineStartPoint, p2: lineEndPoint, color: color });
+            }
+            isDrawingLine = false; lineStartPoint = null;
+            handleDraw();
+        }
+    });
+    mathCanvas.addEventListener('mouseleave', () => {
+        if(currentMode === 'interactiveCoordinatePlane') {
+            snapIndicatorPos = null;
+            snappedMathPos = null;
+            if(!isDrawingLine) handleDraw();
+        }
+    });
+    document.addEventListener('mouseup', () => { if(draggingPoint) draggingPoint = null; });
+    
+    setupInputsForMode(currentMode);
+});
+</script>
+</body>
+</html>

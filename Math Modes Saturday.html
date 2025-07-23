@@ -1,0 +1,1581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;</p>
+<p class="p1">&lt;html&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta http-equiv="Content-Style-Type" content="text/css"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Math Modes Sequel - Revised UI&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="Generator" content="Claude-3 Opus AI"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>MathJax = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tex: {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>inlineMath: [['$', '$'], ['\\(', '\\)']],</p>
+<p class="p1"><span class="Apple-converted-space">          </span>displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],</p>
+<p class="p1"><span class="Apple-converted-space">          </span>processEscapes: true</p>
+<p class="p1"><span class="Apple-converted-space">        </span>},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>svg: {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>fontCache: 'global'</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>body { font-family: sans-serif; font-size: 1.1rem; background-color: #f1f5f9; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.message-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #ef4444; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000; display: none; font-size: 1rem; font-weight: bold; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.5em 1.5em; padding-right: 2.5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>input, textarea, select { font-size: 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>input::placeholder, textarea::placeholder { font-weight: normal; color: #9ca3af; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.hidden { display: none !important; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.toggle-btn { width: 3.5rem; height: 2rem; border-radius: 9999px; padding: 0.25rem; transition: background-color 0.2s ease-in-out; cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.toggle-dot { width: 1.5rem; height: 1.5rem; background-color: white; border-radius: 9999px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); transition: transform 0.2s ease-in-out; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.toggle-on { background-image: linear-gradient(130deg, #2B6DFE, #00F2FF); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.toggle-off { background-color: #d1d5db; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.dot-on { transform: translateX(1.5rem); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.remove-line-button { background-color: transparent; color: #ef4444; border: none; padding: 0; font-size: 1.5rem; line-height: 1; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: color 0.2s ease-in-out; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.remove-line-button:hover { color: #dc2626; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#contentWrapper { display: flex; flex-direction: column; gap: 1rem; width: 100%; flex-grow: 1;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#inputsPanel { position: relative; width: 100%; background-color: #f8fafc; padding: 1rem; border-radius: 0.5rem; display: flex; flex-direction: column; gap: 1rem; transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, border 0.3s ease-in-out; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#displayWrapper { width: 100%; background-color: #dbeafe; border-radius: 0.5rem; overflow: auto; border: 2px solid #e2e8f0; transition: all 0.3s ease-in-out; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; display: flex; justify-content: center; align-items: center; flex-grow: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#displayWrapper.display-shrunken { height: 250px; min-height: 250px; flex-grow: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#textDisplayWrapper { padding: 2rem; height: 100%; width: 100%; overflow-y: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#textDisplayWrapper p { margin-bottom: 1.5rem; font-size: 2.25rem; line-height: 2; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#mathCanvas { display: block; width: 100%; height: 100%; cursor: default; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#answerWrapper { background-color: #d1fae5; border: 2px solid #a7f3d0; border-radius: 0.5rem; padding: 2rem; margin-top: 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#answerWrapper p { margin-bottom: 1rem; font-size: 2.25rem; line-height: 1.8; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#answerWrapper p.final-answer { font-size: 2.25rem; font-weight: bold;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>@media (min-width: 768px) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>#contentWrapper { flex-direction: row; }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>#inputsPanel { width: 33.333333%; }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>#inputsPanel.panel-hidden { width: 0; padding: 0; overflow: hidden; border: none; opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>#displayWrapper { width: 66.666666%; height: 600px; }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>#displayWrapper.canvas-expanded { width: 100%; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-f1f5f9 flex items-center justify-center p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="w-full mx-auto bg-white rounded-2xl p-6 flex flex-col gap-4 min-h-screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="topControlsRow" class="flex flex-wrap items-center justify-between gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="main-controls" class="flex flex-wrap items-center gap-4 justify-center md:justify-start"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;select id="modeSelector" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 text-sm md:text-base rounded-lg transition border-2 border-transparent focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="equationSolver"&gt;Equation Solver&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="expressionSimplifier"&gt;Expression Simplifier&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="scatterPlotBestFit"&gt;Scatter Plot &amp; Line of Best Fit&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="functionExplorer"&gt;Interactive Function Explorer&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="scientificNotation"&gt;Scientific Notation Tool&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="exponentRules"&gt;Exponent Rules Explorer&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="irrationalExplorer"&gt;Irrational Number Explorer&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="dataSetAnalyzer"&gt;Data Set Analyzer&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="probabilitySimulator"&gt;Probability Simulator&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="functionTransformation"&gt;Function Transformation Tool&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="systemsOfEquations"&gt;Systems of Equations Solver&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="linearEquationFromData"&gt;Linear Equation from Data&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="congruenceSimilarity"&gt;Congruence/Similarity Explorer&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="interactiveCoordinatePlane"&gt;Interactive Coordinate Plane&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="geometricSeries"&gt;Geometric Series Visualizer&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="top-input-container" class="flex flex-wrap items-center gap-2"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center gap-6 ml-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="answer-toggle-wrapper" class="hidden flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="text-sm font-semibold"&gt;$Answer$&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="answer-toggle-btn" class="toggle-btn toggle-off"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="answer-toggle-dot" class="toggle-dot"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="menu-toggle-wrapper" class="flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="text-sm font-semibold"&gt;$Menu$&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="menu-toggle-btn" class="toggle-btn toggle-on"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="menu-toggle-dot" class="toggle-dot dot-on"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="contentWrapper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="inputsPanel"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="displayWrapper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;canvas id="mathCanvas"&gt;&lt;/canvas&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="textDisplayWrapper" class="hidden"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="answerWrapper" class="hidden"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="messageBox" class="message-box"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">// --- GLOBAL DOM ELEMENTS &amp; STATE ---</p>
+<p class="p1">const modeSelector = document.getElementById('modeSelector');</p>
+<p class="p1">const messageBox = document.getElementById('messageBox');</p>
+<p class="p1">const inputsPanel = document.getElementById('inputsPanel');</p>
+<p class="p1">const displayWrapper = document.getElementById('displayWrapper');</p>
+<p class="p1">const mathCanvas = document.getElementById('mathCanvas');</p>
+<p class="p1">const textDisplayWrapper = document.getElementById('textDisplayWrapper');</p>
+<p class="p1">const answerWrapper = document.getElementById('answerWrapper');</p>
+<p class="p1">const topInputContainer = document.getElementById('top-input-container');</p>
+<p class="p1">const contentWrapper = document.getElementById('contentWrapper');</p>
+<p class="p1">const mainControls = document.getElementById('main-controls');</p>
+<p class="p1">const ctx = mathCanvas.getContext('2d');</p>
+<p class="p1">const menuToggleWrapper = document.getElementById('menu-toggle-wrapper');</p>
+<p class="p1">const menuToggleBtn = document.getElementById('menu-toggle-btn');</p>
+<p class="p1">const menuToggleDot = document.getElementById('menu-toggle-dot');</p>
+<p class="p1">const answerToggleWrapper = document.getElementById('answer-toggle-wrapper');</p>
+<p class="p1">const answerToggleBtn = document.getElementById('answer-toggle-btn');</p>
+<p class="p1">const answerToggleDot = document.getElementById('answer-toggle-dot');</p>
+<p class="p1">let currentMode = 'equationSolver';</p>
+<p class="p1">const colors = { main: '#000000', answer: '#059669', point: '#2B6DFE', grid: '#a0aec0', axis: '#64748b', primaryBlue: '#007bff', label: '#94a3b8', parentFunc: '#f97316', manualLine: '#db2777', targetShape: '#475569', negativeTerm: '#ef4444' };</p>
+<p class="p1">const defaultLineColors = ['#2B6DFE', '#ef4444', '#22c55e', '#8b5cf6', '#f97316', '#14b8a6'];</p>
+<p class="p1">let nextLineColorIndex = 0;</p>
+<p class="p2"><br></p>
+<p class="p1">// State</p>
+<p class="p1">let isAnswerToggledOn = false;</p>
+<p class="p1">let snapIndicatorPos = null; // Canvas Coordinates {x, y}</p>
+<p class="p1">let snappedMathPos = null; <span class="Apple-converted-space">  </span>// Math Coordinates {x, y}</p>
+<p class="p1">let isDrawingLine = false;</p>
+<p class="p1">let lineStartPoint = null;</p>
+<p class="p1">let manualLinePoint1 = { x: -5, y: -5 };</p>
+<p class="p1">let manualLinePoint2 = { x: 5, y: 5 };</p>
+<p class="p1">let draggingPoint = null;</p>
+<p class="p1">let plottedObjects = [];</p>
+<p class="p1">let currentTool = 'plotPoint';</p>
+<p class="p1">let analysisResults = null; // For Data Set Analyzer</p>
+<p class="p1">let simulationResults = null; // For Probability Simulator</p>
+<p class="p2"><br></p>
+<p class="p1">const topRowInputModes = ['equationSolver', 'expressionSimplifier', 'scientificNotation', 'exponentRules', 'dataSetAnalyzer', 'irrationalExplorer', 'probabilitySimulator'];</p>
+<p class="p1">const textBasedModes = topRowInputModes;</p>
+<p class="p2"><br></p>
+<p class="p1">// --- UI TEMPLATES &amp; GENERATORS ---</p>
+<p class="p1">const panelInputTemplates = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>scatterPlotBestFit: `&lt;h3 class="font-bold text-xl text-slate-800"&gt;$Scatter Plot Data$&lt;/h3&gt;&lt;div&gt;&lt;label for="scatter-data" class="text-lg font-semibold text-slate-700 mb-1 block"&gt;$Data Points (x, y):$&lt;/label&gt;&lt;textarea id="scatter-data" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" rows="10" placeholder="(1, 2)\\n2, 3\\n(3, 3.5)"&gt;1, 1.5\n2, 3.2\n3, 3.1\n4, 4.8\n5, 5.2\n6, 7.1&lt;/textarea&gt;&lt;/div&gt;&lt;div&gt;&lt;label for="scatter-title" class="text-lg font-semibold text-slate-700 mb-1 block"&gt;$Chart Title:$&lt;/label&gt;&lt;input type="text" id="scatter-title" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="Sample Data"&gt;&lt;/div&gt;&lt;div&gt;&lt;label for="scatter-x-label" class="text-lg font-semibold text-slate-700 mb-1 block"&gt;$X-Axis Label:$&lt;/label&gt;&lt;input type="text" id="scatter-x-label" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="Independent Variable"&gt;&lt;/div&gt;&lt;div&gt;&lt;label for="scatter-y-label" class="text-lg font-semibold text-slate-700 mb-1 block"&gt;$Y-Axis Label:$&lt;/label&gt;&lt;input type="text" id="scatter-y-label" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="Dependent Variable"&gt;&lt;/div&gt;&lt;div class="flex items-center gap-2 mt-2"&gt;&lt;input type="checkbox" id="show-best-fit" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked&gt;&lt;label for="show-best-fit" class="text-lg font-semibold text-slate-700"&gt;$Show Line of Best Fit$&lt;/label&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>functionExplorer: `&lt;h3 class="font-bold text-xl text-slate-800 mb-2"&gt;$Function Explorer$&lt;/h3&gt;&lt;div id="equationLinesContainer" class="flex flex-col gap-2 w-full"&gt;&lt;/div&gt;&lt;button type="button" id="add-function-btn" class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-blue-600 text-base mt-2 self-start"&gt;$Add Function$&lt;/button&gt;&lt;div class="mt-4 pt-4 border-t-2"&gt;&lt;h4 class="font-bold text-xl text-slate-800 mb-2"&gt;$Input/Output Table$&lt;/h4&gt;&lt;div class="flex items-center gap-2"&gt;&lt;label for="table-x-values" class="text-lg"&gt;$x = $&lt;/label&gt;&lt;input type="text" id="table-x-values" class="flex-grow p-1 border-2 rounded-lg text-base" value="-2, -1, 0, 1, 2" placeholder="e.g., -2, -1, 0, 1, 2"&gt;&lt;/div&gt;&lt;div id="function-table-container" class="mt-2 max-h-48 overflow-y-auto"&gt;&lt;/div&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>functionTransformation: `&lt;h3 class="font-bold text-xl text-slate-800"&gt;$Function Transformations$&lt;/h3&gt;&lt;p class="text-lg bg-slate-100 p-2 rounded-lg text-center"&gt;$g(x) = a \\cdot f(b \\cdot (x - h)) + k$&lt;/p&gt;&lt;div&gt;&lt;label for="parent-function" class="text-lg font-semibold text-slate-700"&gt;$f(x):$&lt;/label&gt;&lt;select id="parent-function" class="w-full bg-slate-200 p-2 rounded-lg text-base mt-1"&gt;&lt;option value="x**2"&gt;$f(x) = x^2$&lt;/option&gt;&lt;option value="x**3"&gt;$f(x) = x^3$&lt;/option&gt;&lt;option value="Math.abs(x)"&gt;$f(x) = |x|$&lt;/option&gt;&lt;option value="Math.sqrt(x)"&gt;$f(x) = \\sqrt{x}$&lt;/option&gt;&lt;option value="Math.sin(x)"&gt;$f(x) = \\sin(x)$&lt;/option&gt;&lt;option value="x"&gt;$f(x) = x$&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div class="grid grid-cols-3 items-center gap-2 mt-2"&gt;&lt;label for="slider-a" class="text-lg font-semibold"&gt;$a$&lt;/label&gt;&lt;input type="range" id="slider-a" min="-5" max="5" value="1" step="0.1" class="col-span-2"&gt;&lt;span id="label-a" class="text-lg col-start-2 col-span-2"&gt;$1$&lt;/span&gt;&lt;label for="slider-b" class="text-lg font-semibold"&gt;$b$&lt;/label&gt;&lt;input type="range" id="slider-b" min="-5" max="5" value="1" step="0.1" class="col-span-2"&gt;&lt;span id="label-b" class="text-lg col-start-2 col-span-2"&gt;$1$&lt;/span&gt;&lt;label for="slider-h" class="text-lg font-semibold"&gt;$h$&lt;/label&gt;&lt;input type="range" id="slider-h" min="-10" max="10" value="0" step="0.5" class="col-span-2"&gt;&lt;span id="label-h" class="text-lg col-start-2 col-span-2"&gt;$0$&lt;/span&gt;&lt;label for="slider-k" class="text-lg font-semibold"&gt;$k$&lt;/label&gt;&lt;input type="range" id="slider-k" min="-10" max="10" value="0" step="0.5" class="col-span-2"&gt;&lt;span id="label-k" class="text-lg col-start-2 col-span-2"&gt;$0$&lt;/span&gt;&lt;/div&gt;&lt;div class="flex items-center gap-2 mt-2"&gt;&lt;input type="checkbox" id="show-parent-func" class="h-4 w-4 rounded" checked&gt;&lt;label for="show-parent-func" class="text-lg"&gt;$Show Parent f(x)$&lt;/label&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>systemsOfEquations: `&lt;h3 class="font-bold text-xl text-slate-800 mb-2"&gt;$Systems of Equations$&lt;/h3&gt;&lt;div id="equationLinesContainer" class="flex flex-col gap-2 w-full"&gt;&lt;/div&gt;&lt;button type="button" id="add-equation-btn" class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-blue-600 text-base mt-2 self-start"&gt;$Add Equation$&lt;/button&gt;&lt;div id="solution-display" class="mt-4 pt-4 border-t-2 bg-slate-100 p-3 rounded-lg"&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>linearEquationFromData: `&lt;h3 class="font-bold text-xl text-slate-800"&gt;$Linear Model from Data$&lt;/h3&gt;&lt;div&gt;&lt;label for="scatter-data" class="text-lg font-semibold text-slate-700 mb-1 block"&gt;$Data Points (x, y):$&lt;/label&gt;&lt;textarea id="scatter-data" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" rows="8" placeholder="(1, 2)\\n2, 3\\n(3, 3.5)"&gt;1, 1.8\n2, 3.9\n3, 6.3\n4, 8.1\n5, 10.2&lt;/textarea&gt;&lt;/div&gt;&lt;div class="flex items-center gap-2 mt-2"&gt;&lt;input type="checkbox" id="show-best-fit" class="h-4 w-4 rounded" checked&gt;&lt;label for="show-best-fit" class="text-lg font-semibold text-slate-700"&gt;$Show Calculated Best Fit$&lt;/label&gt;&lt;/div&gt;&lt;div class="mt-2 pt-2 border-t"&gt;&lt;h4 class="font-bold text-xl text-slate-800 mb-2"&gt;$Manual Fit Line$&lt;/h4&gt;&lt;p class="text-base"&gt;Drag the &lt;span class="text-pink-600 font-bold"&gt;pink handles&lt;/span&gt; on the graph to create your own line.&lt;/p&gt;&lt;div id="manual-line-eq" class="mt-2 p-2 bg-slate-100 rounded text-center text-lg"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="mt-2 pt-2 border-t"&gt;&lt;h4 class="font-bold text-xl text-slate-800 mb-2"&gt;$Prediction$&lt;/h4&gt;&lt;div class="flex items-center gap-2"&gt;&lt;label for="prediction-x" class="text-lg"&gt;$When x = $&lt;/label&gt;&lt;input type="number" id="prediction-x" class="w-24 p-1 border-2 rounded-lg text-base" value="6"&gt;&lt;/div&gt;&lt;div id="prediction-y" class="mt-2 p-2 bg-slate-100 rounded text-base"&gt;&lt;/div&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>congruenceSimilarity: `&lt;h3 class="font-bold text-xl text-slate-800"&gt;$Congruence \\&amp; Similarity$&lt;/h3&gt;&lt;p class="text-base"&gt;Transform the &lt;span class="font-bold" style="color:${colors.primaryBlue}"&gt;blue shape&lt;/span&gt; to match the &lt;span class="font-bold" style="color:${colors.targetShape}"&gt;gray shape&lt;/span&gt;.&lt;/p&gt;&lt;div class="grid grid-cols-3 items-center gap-2 mt-2"&gt;&lt;label for="slider-tx" class="text-lg font-semibold"&gt;$Translate~X$&lt;/label&gt;&lt;input type="range" id="slider-tx" min="-10" max="10" value="0" step="0.5" class="col-span-2"&gt;&lt;span id="label-tx" class="text-lg col-start-2 col-span-2"&gt;$0$&lt;/span&gt;&lt;label for="slider-ty" class="text-lg font-semibold"&gt;$Translate~Y$&lt;/label&gt;&lt;input type="range" id="slider-ty" min="-10" max="10" value="0" step="0.5" class="col-span-2"&gt;&lt;span id="label-ty" class="text-lg col-start-2 col-span-2"&gt;$0$&lt;/span&gt;&lt;label for="slider-rot" class="text-lg font-semibold"&gt;$Rotate$&lt;/label&gt;&lt;input type="range" id="slider-rot" min="-180" max="180" value="0" step="1" class="col-span-2"&gt;&lt;span id="label-rot" class="text-lg col-start-2 col-span-2"&gt;$0°$&lt;/span&gt;&lt;label for="slider-scale" class="text-lg font-semibold"&gt;$Scale$&lt;/label&gt;&lt;input type="range" id="slider-scale" min="0.1" max="3" value="1" step="0.1" class="col-span-2"&gt;&lt;span id="label-scale" class="text-lg col-start-2 col-span-2"&gt;$1$&lt;/span&gt;&lt;/div&gt;&lt;div id="check-result" class="mt-4 p-3 bg-slate-100 rounded text-center text-lg font-bold"&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>interactiveCoordinatePlane: `&lt;h3 class="font-bold text-xl text-slate-800"&gt;$Coordinate Plane$&lt;/h3&gt;&lt;div&gt;&lt;h4 class="text-lg font-semibold text-slate-700 mb-1"&gt;$Tools$&lt;/h4&gt;&lt;div class="flex items-center gap-4"&gt;&lt;label class="text-base"&gt;&lt;input type="radio" name="coord-tool" value="plotPoint" checked&gt; $Plot Point$&lt;/label&gt;&lt;label class="text-base"&gt;&lt;input type="radio" name="coord-tool" value="drawLine"&gt; $Draw Line$&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="mt-2 pt-2 border-t flex-grow flex flex-col"&gt;&lt;h4 class="font-bold text-xl text-slate-800 mb-2"&gt;$Objects$&lt;/h4&gt;&lt;div id="objects-list" class="flex-grow max-h-96 overflow-y-auto text-base"&gt;&lt;/div&gt;&lt;/div&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>geometricSeries: `&lt;h3 class="font-bold text-xl text-slate-800"&gt;$Geometric Series Visualizer$&lt;/h3&gt;&lt;p class="text-lg bg-slate-100 p-2 rounded-lg text-center"&gt;$S_n = a + ar + ar^2 + ...$&lt;/p&gt;&lt;div class="grid grid-cols-3 items-center gap-2 mt-2"&gt;&lt;label for="slider-a" class="text-lg font-semibold"&gt;$a$ (first term)&lt;/label&gt;&lt;input type="range" id="slider-a" min="-5" max="5" value="1" step="0.1" class="col-span-2"&gt;&lt;span id="label-a" class="text-lg col-start-2 col-span-2"&gt;$1$&lt;/span&gt;&lt;label for="slider-r" class="text-lg font-semibold"&gt;$r$ (ratio)&lt;/label&gt;&lt;input type="range" id="slider-r" min="-1.5" max="1.5" value="0.5" step="0.01" class="col-span-2"&gt;&lt;span id="label-r" class="text-lg col-start-2 col-span-2"&gt;$0.5$&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;label for="series-terms" class="text-lg font-semibold text-slate-700 mb-1 block"&gt;$Terms to show:$&lt;/label&gt;&lt;input type="number" id="series-terms" class="w-full p-2 border-2 border-slate-300 rounded-lg text-base" value="10" min="1" max="50"&gt;&lt;/div&gt;&lt;div id="series-results" class="mt-4 pt-4 border-t-2 bg-slate-100 p-3 rounded-lg text-base"&gt;&lt;/div&gt;`,</p>
+<p class="p1">};</p>
+<p class="p1">const topRowInputTemplates = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>irrationalExplorer: `&lt;label for="number-input" class="text-base font-semibold text-slate-700"&gt;Number:&lt;/label&gt;&lt;input type="text" id="number-input" class="p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., pi, sqrt(2)" value="pi"&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>scientificNotation: `&lt;label for="sci-num-input" class="text-base font-semibold text-slate-700"&gt;Number:&lt;/label&gt;&lt;input type="text" id="sci-num-input" class="p-2 border-2 border-slate-300 rounded-lg text-base" value="12345.67"&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>exponentRules: `&lt;label for="exponent-expression" class="text-base font-semibold text-slate-700"&gt;Expression:&lt;/label&gt;&lt;input type="text" id="exponent-expression" class="w-64 p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., x^2 * x^3" value="x^2 * x^3"&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>dataSetAnalyzer: `&lt;label for="data-set" class="text-base font-semibold text-slate-700"&gt;Data:&lt;/label&gt;&lt;textarea id="data-set" class="p-2 border-2 border-slate-300 rounded-lg text-base" rows="1" style="width: 250px; height: 40px;"&gt;1,2,2,3,4,5,5,5,6,7&lt;/textarea&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>probabilitySimulator: `&lt;select id="sim-type" class="bg-slate-200 p-2 rounded-lg text-base"&gt;&lt;option value="coin"&gt;Coin Flip&lt;/option&gt;&lt;option value="twoCoins"&gt;Two Coin Flips&lt;/option&gt;&lt;option value="dice6"&gt;6-Sided Dice&lt;/option&gt;&lt;option value="sum2d6"&gt;Sum of 2 6-Sided Dice&lt;/option&gt;&lt;option value="coinAndDice"&gt;Coin &amp; Dice Roll&lt;/option&gt;&lt;option value="dice20"&gt;20-Sided Dice&lt;/option&gt;&lt;/select&gt;&lt;label for="sim-trials" class="text-base font-semibold text-slate-700"&gt;Trials:&lt;/label&gt;&lt;input type="number" id="sim-trials" class="w-24 p-2 border-2 border-slate-300 rounded-lg text-base" value="1000"&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>expressionSimplifier: `&lt;label for="algebraic-expression" class="text-base font-semibold text-slate-700"&gt;Expression:&lt;/label&gt;&lt;input type="text" id="algebraic-expression" class="flex-grow p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., 2(3x + 4) - 5x" value="3(2x + 5) - 4x + 7"&gt;`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>equationSolver: `&lt;label for="equation-input" class="text-base font-semibold text-slate-700"&gt;Equation:&lt;/label&gt;&lt;input type="text" id="equation-input" class="flex-grow p-2 border-2 border-slate-300 rounded-lg text-base" placeholder="e.g., x^2 + 2*x - 15 = 0" value="x^2 + 2*x - 15 = 0"&gt;`</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">// --- UTILITY FUNCTIONS ---</p>
+<p class="p1">function showMessage(message, isError=false, duration = 3000) { messageBox.textContent = message; messageBox.style.backgroundColor = isError ? '#ef4444' : '#22c55e'; messageBox.style.display = 'block'; setTimeout(() =&gt; { messageBox.style.display = 'none'; }, duration); }</p>
+<p class="p1">function clearCanvas(canvas, context) { context.clearRect(0, 0, canvas.width, canvas.height); }</p>
+<p class="p1">function formatExpressionForJax(str) { return str.replace(/\*/g, ' \\cdot ').replace(/\//g, ' / '); }</p>
+<p class="p2"><br></p>
+<p class="p1">// --- PARSING &amp; CALCULATION FUNCTIONS ---</p>
+<p class="p1">function parseScatterData(dataString) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const points = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const lines = dataString.split(/[\n\r]+/).filter(line =&gt; line.trim() !== '');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const regex = /^\s*\(*\s*(-?\d*\.?\d+)\s*[,;\s]\s*(-?\d*\.?\d+)\s*\)*\s*$/;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const line of lines) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const match = line.trim().match(regex);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (match) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x = parseFloat(match[1]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const y = parseFloat(match[2]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!isNaN(x) &amp;&amp; !isNaN(y)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>points.push({ x, y });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return points;</p>
+<p class="p1">}</p>
+<p class="p1">function calculateLinearRegression(data) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (data.length &lt; 2) return { m: NaN, b: NaN, r2: NaN };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const n = data.length;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>data.forEach(p =&gt; { sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumX2 += p.x * p.x; sumY2 += p.y * p.y; });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const m_denominator = (n * sumX2 - sumX * sumX);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (m_denominator === 0) return { m: Infinity, b: Infinity, r2: NaN };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const m = (n * sumXY - sumX * sumY) / m_denominator;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = (sumY - m * sumX) / n;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const r2_numerator = Math.pow((n * sumXY - sumX * sumY), 2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const r2_denominator = (n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const r2 = r2_denominator === 0 ? 1 : r2_numerator / r2_denominator;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return { m, b, r2 };</p>
+<p class="p1">}</p>
+<p class="p1">function parseNumberInput(input) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const s = input.trim().toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (s === 'pi') return { val: Math.PI, type: 'Irrational (π)', symbol: 'π' };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (s === 'e') return { val: Math.E, type: 'Irrational (e)', symbol: 'e' };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const sqrtMatch = s.match(/^sqrt\((\d+\.?\d*)\)$/);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (sqrtMatch) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const num = parseFloat(sqrtMatch[1]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (num &lt; 0) return null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const val = Math.sqrt(num);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const isRational = Number.isInteger(Math.sqrt(num));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return { val, type: isRational ? 'Rational' : 'Irrational', symbol: `\\sqrt{${num}}` };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const fracMatch = s.match(/^(-?\d+)\s*\/\s*(\d+)$/);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (fracMatch) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const num = parseInt(fracMatch[1]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const den = parseInt(fracMatch[2]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (den === 0) return null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return { val: num / den, type: 'Rational', symbol: `\\frac{${num}}{${den}}` };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const num = parseFloat(s);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!isNaN(num)) return { val: num, type: Number.isInteger(num) ? 'Integer' : 'Rational', symbol: s };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return null;</p>
+<p class="p1">}</p>
+<p class="p1">function parseLinearEquation(str) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>str = str.replace(/\s/g, '');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let m = 0, b = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let match = str.match(/^y=([+\-]?\d*\.?\d*)x([+\-]\d+\.?\d*)?$/);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (match) { m = match[1] === '' ? 1 : match[1] === '-' ? -1 : parseFloat(match[1]) || 0; b = parseFloat(match[2]) || 0; return { m, b }; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>match = str.match(/^y=([+\-]?\d+\.?\d*)$/);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (match) { m = 0; b = parseFloat(match[1]); return { m, b }; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>match = str.match(/^([+\-]?\d*\.?\d*)x([+\-]\d*\.?\d*)y=([+\-]?\d+\.?\d*)$/);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (match) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let A = match[1] === '' ? 1 : match[1] === '-' ? -1 : parseFloat(match[1]) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let B = match[2] === '+' ? 1 : match[2] === '-' ? -1 : parseFloat(match[2]) || 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let C = parseFloat(match[3]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (B === 0) return null; return { m: -A/B, b: C/B };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return null;</p>
+<p class="p1">}</p>
+<p class="p1">function runDataSetAnalysis() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const dataStr = document.getElementById('data-set')?.value || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const data = dataStr.split(',').map(s =&gt; parseFloat(s.trim())).filter(n =&gt; !isNaN(n)).sort((a,b) =&gt; a - b);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (data.length === 0) { showMessage("Data set is empty.", true); analysisResults = null; return; }</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const n = data.length;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const sum = data.reduce((acc, val) =&gt; acc + val, 0);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mean = sum / n;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const median = n % 2 === 0 ? (data[n/2 - 1] + data[n/2]) / 2 : data[Math.floor(n/2)];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const counts = {};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>data.forEach(x =&gt; { counts[x] = (counts[x] || 0) + 1; });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let mode = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let maxFreq = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const key in counts) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (counts[key] &gt; maxFreq) { mode = [key]; maxFreq = counts[key]; }<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>else if (counts[key] === maxFreq &amp;&amp; counts[key] &gt; 1) { mode.push(key); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (maxFreq &lt;= 1) mode = ['None'];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const range = data[n-1] - data[0];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const variance = data.reduce((acc, val) =&gt; acc + (val - mean)**2, 0) / n;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const stdDev = Math.sqrt(variance);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const q1Index = Math.floor((n + 1) / 4 - 1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const q3Index = Math.floor(3 * (n + 1) / 4 - 1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const q1 = data[q1Index];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const q3 = data[q3Index];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisResults = { data, n, mean, median, mode, range, variance, stdDev, minVal: data[0], q1, q3, maxVal: data[n-1] };</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const { minVal, maxVal } = analysisResults;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let analysisHtml = `&lt;h4 class="font-bold text-xl text-slate-800"&gt;$Central Tendency$&lt;/h4&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;p&gt;Mean: ${mean.toFixed(3)}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;p&gt;Median: ${median.toFixed(3)}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;p&gt;Mode: ${mode.join(', ')}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;h4 class="font-bold text-xl text-slate-800 mt-4"&gt;$Spread$&lt;/h4&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;p&gt;Range: ${range.toFixed(3)}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;p&gt;Min: ${minVal.toFixed(3)}, Q1: ${q1.toFixed(3)}, Q3: ${q3.toFixed(3)}, Max: ${maxVal.toFixed(3)}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisHtml += `&lt;p&gt;Standard Deviation: ${stdDev.toFixed(3)}&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerWrapper.innerHTML = analysisHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(window.MathJax) MathJax.typesetPromise([answerWrapper]);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>handleDraw();</p>
+<p class="p1">}</p>
+<p class="p1">function runSimulation() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const simType = document.getElementById('sim-type').value;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const trials = parseInt(document.getElementById('sim-trials').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isNaN(trials) || trials &lt;= 0) { showMessage("Please enter a valid number of trials.", true); return; }</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let outcomes = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const counts = {};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (simType === 'coin') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes = ['Heads', 'Tails'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes.forEach(o =&gt; counts[o] = 0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; trials; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>counts[outcomes[Math.floor(Math.random() * 2)]]++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if (simType === 'twoCoins') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes = ['HH', 'HT', 'TH', 'TT'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes.forEach(o =&gt; counts[o] = 0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sides = ['H', 'T'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; trials; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const r1 = sides[Math.floor(Math.random() * 2)];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const r2 = sides[Math.floor(Math.random() * 2)];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>counts[r1 + r2]++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if (simType === 'dice6') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes = ['1','2','3','4','5','6'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes.forEach(o =&gt; counts[o] = 0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; trials; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>counts[(Math.floor(Math.random() * 6) + 1).toString()]++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if (simType === 'sum2d6') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes = Array.from({length: 11}, (_, i) =&gt; (i+2).toString());</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes.forEach(o =&gt; counts[o] = 0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; trials; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const r1 = Math.floor(Math.random() * 6) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const r2 = Math.floor(Math.random() * 6) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>counts[(r1 + r2).toString()]++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if (simType === 'coinAndDice') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sides = ['H', 'T'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for(const s of sides){ for(let i=1; i&lt;=6; i++){ outcomes.push(s+i); } }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes.forEach(o =&gt; counts[o] = 0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; trials; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const coin = sides[Math.floor(Math.random() * 2)];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dice = Math.floor(Math.random() * 6) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>counts[coin + dice]++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if (simType === 'dice20') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes = Array.from({length: 20}, (_, i) =&gt; (i+1).toString());</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outcomes.forEach(o =&gt; counts[o] = 0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; trials; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>counts[(Math.floor(Math.random() * 20) + 1).toString()]++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>simulationResults = { counts, trials, outcomes, simType };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>handleDraw();</p>
+<p class="p1">}</p>
+<p class="p1">function runSimplification() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let expr = document.getElementById('algebraic-expression')?.value.trim() || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!expr) { showMessage("Please enter an expression to simplify.", true); return; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let stepsHtml = [`&lt;p&gt;&lt;strong&gt;Original Expression:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;$$${formatExpressionForJax(expr)}$$&lt;/p&gt;`];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let currentExpr = expr;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// --- Step 1: Distribution ---</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let hadDistribution = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>while (true) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let match = currentExpr.match(/(-?\d*\.?\d*)\s*\*?\s*\(([^\(\)]+)\)/);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!match) break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>hadDistribution = true;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let factorStr = match[1];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let innerExpr = match[2];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let factor = (factorStr === '' || factorStr === '+') ? 1 : (factorStr === '-') ? -1 : parseFloat(factorStr);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const terms = innerExpr.replace(/\s/g, '').replace(/-/g, '+-').split('+').filter(t =&gt; t);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const expanded = terms.map(term =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const termMatch = term.match(/(-?\d*\.?\d*)([a-zA-Z\^0-9]*)/);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let coeff = (termMatch[1] === '' || termMatch[1] === '+') ? 1 : (termMatch[1] === '-') ? -1 : parseFloat(termMatch[1]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const variable = termMatch[2] || '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let newCoeff = factor * coeff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (newCoeff &gt; 0) return `+${newCoeff}${variable}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return `${newCoeff}${variable}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}).join('');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>currentExpr = currentExpr.replace(match[0], ` ${expanded} `);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (hadDistribution) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>stepsHtml.push(`&lt;p&gt;&lt;strong&gt;Apply Distributive Property:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;$$${formatExpressionForJax(currentExpr)}$$&lt;/p&gt;`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// --- Step 2: Combine Like Terms ---</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let processedExpr = currentExpr.replace(/\s/g, '').replace(/-/g, '+-');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!processedExpr.startsWith('+') &amp;&amp; !processedExpr.startsWith('-')) processedExpr = '+' + processedExpr;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const termList = processedExpr.match(/[+\-][^+\-]+/g) || [];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const termMap = new Map();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>termList.forEach(term =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const match = term.match(/([+\-]\d*\.?\d*)([a-zA-Z\^0-9]*)?|([+\-])([a-zA-Z\^0-9]+)/);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let coeff, variable;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (match[1]) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>coeff = (match[1] === '+') ? 1 : (match[1] === '-') ? -1 : parseFloat(match[1]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>variable = match[2] || 'CONST';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>coeff = (match[3] === '+') ? 1 : -1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>variable = match[4];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>termMap.set(variable, (termMap.get(variable) || 0) + coeff);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const groups = {};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>termList.forEach(term =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const match = term.match(/[a-zA-Z\^0-9]+$/);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const variable = match ? match[0] : 'CONST';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!groups[variable]) groups[variable] = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>groups[variable].push(term);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const groupedString = Object.values(groups).map(g =&gt; `(${g.join(' ')})`).join(' + ');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>stepsHtml.push(`&lt;p&gt;&lt;strong&gt;Group Like Terms:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;$$${formatExpressionForJax(groupedString.replace(/^\s*\+\s*/, ''))}$$&lt;/p&gt;`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// --- Step 3: Final Answer ---</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let finalParts = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const sortedKeys = Array.from(termMap.keys()).sort((a, b) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (a === 'CONST') return 1; if (b === 'CONST') return -1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (a &gt; b) return -1; if (b &gt; a) return 1; return 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>sortedKeys.forEach(variable =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let coeff = termMap.get(variable);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (Math.abs(coeff) &lt; 1e-9) return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (variable === 'CONST') { finalParts.push(coeff); }<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (coeff === 1) finalParts.push(variable);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else if (coeff === -1) finalParts.push(`-${variable}`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else finalParts.push(`${coeff}${variable}`);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let finalExpr = finalParts.join('+').replace(/\+-/g, '-');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (finalExpr.startsWith('+')) finalExpr = finalExpr.substring(1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>stepsHtml.push(`&lt;p&gt;&lt;strong&gt;Simplified Result:&lt;/strong&gt;&lt;/p&gt;&lt;p class="final-answer"&gt;$$${formatExpressionForJax(finalExpr)}$$&lt;/p&gt;`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// --- Display ---</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerWrapper.innerHTML = stepsHtml.join('');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (window.MathJax) MathJax.typesetPromise([answerWrapper]);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function runEquationSolver() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const eqStr = document.getElementById('equation-input')?.value || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!eqStr.includes('=')) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>showMessage("Invalid equation: must contain an '=' sign.", true);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parseTerms = (exprStr) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const coeffs = { a: 0, b: 0, c: 0 }; // for ax^2 + bx + c</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!exprStr) return coeffs;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let processed = exprStr.replace(/\s/g, '').replace(/\^/g, '**').replace(/-/g, '+-');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (processed.startsWith('+')) processed = processed.substring(1);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const terms = processed.split('+');</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>terms.forEach(term =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (term.includes('x**2')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const val = term.replace('x**2', '').replace('*', '');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>coeffs.a += (val === '' || val === '+') ? 1 : (val === '-') ? -1 : parseFloat(val);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (term.includes('x')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const val = term.replace('x', '').replace('*', '');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>coeffs.b += (val === '' || val === '+') ? 1 : (val === '-') ? -1 : parseFloat(val);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (term !== '') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>coeffs.c += parseFloat(term);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return coeffs;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const [lhsStr, rhsStr] = eqStr.split('=');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const lhsCoeffs = parseTerms(lhsStr);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rhsCoeffs = parseTerms(rhsStr);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const a = lhsCoeffs.a - rhsCoeffs.a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = lhsCoeffs.b - rhsCoeffs.b;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const c = lhsCoeffs.c - rhsCoeffs.c;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isNaN(a) || isNaN(b) || isNaN(c)) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>showMessage("Could not parse the equation. Please check the format.", true);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let html = `&lt;p&gt;&lt;strong&gt;1. Standard Form&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Rearrange the equation to the form $ax^2+bx+c=0$:&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const formatTerm = (val, term) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (Math.abs(val) &lt; 1e-9) return '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let sign = val &gt; 0 ? '+' : '-';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>val = Math.abs(val);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let num = (val === 1 &amp;&amp; term !== '') ? '' : val.toFixed(4).replace(/\.?0+$/, '');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return ` ${sign} ${num}${term} `;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let standardForm = `${formatTerm(a, 'x^2')} ${formatTerm(b, 'x')} ${formatTerm(c, '')} = 0`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>standardForm = standardForm.replace(/\s+/g, ' ').trim();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (standardForm.startsWith('+')) standardForm = standardForm.substring(1).trim();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;p&gt;$$${standardForm}$$&lt;/p&gt;`;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Solve</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (Math.abs(a) &lt; 1e-9) { // Linear Equation</p>
+<p class="p1"><span class="Apple-converted-space">        </span>html += `&lt;p&gt;&lt;strong&gt;2. Solve Linear Equation&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;This is a linear equation ($a=0$). We solve for $x$:&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (Math.abs(b) &lt; 1e-9) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += (Math.abs(c) &lt; 1e-9)<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>? `&lt;p class="final-answer"&gt;$$Infinite~Solutions$$&lt;/p&gt;&lt;p&gt;(0 = 0 is always true)&lt;/p&gt;`<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>: `&lt;p class="final-answer"&gt;$$No~Solution$$&lt;/p&gt;&lt;p&gt;(${c.toFixed(2)} = 0 is false)&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x = -c / b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p&gt;$$${b.toFixed(2)}x = ${-c.toFixed(2)}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p&gt;$$x = \\frac{${-c.toFixed(2)}}{${b.toFixed(2)}}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p class="final-answer"&gt;$$x = ${x.toFixed(4).replace(/\.?0+$/, '')}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else { // Quadratic Equation</p>
+<p class="p1"><span class="Apple-converted-space">        </span>html += `&lt;p&gt;&lt;strong&gt;2. Quadratic Formula&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Using $a=${a.toFixed(2)}, b=${b.toFixed(2)}, c=${c.toFixed(2)}$ in the quadratic formula:&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>html += `&lt;p&gt;$$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const discriminant = b*b - 4*a*c;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>html += `&lt;p&gt;The discriminant is $b^2-4ac = ${discriminant.toFixed(4).replace(/\.?0+$/, '')}$.&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (discriminant &gt;= 0) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x1 = (-b + Math.sqrt(discriminant)) / (2*a);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x2 = (-b - Math.sqrt(discriminant)) / (2*a);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p&gt;The solutions are real:&lt;/p&gt;&lt;p class="final-answer"&gt;$$x_1 = ${x1.toFixed(4).replace(/\.?0+$/, '')}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (Math.abs(x1 - x2) &gt; 1e-9) {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>html += `&lt;p class="final-answer"&gt;$$x_2 = ${x2.toFixed(4).replace(/\.?0+$/, '')}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const realPart = -b / (2*a);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const imagPart = Math.sqrt(-discriminant) / (2*a);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p&gt;The solutions are complex:&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p class="final-answer"&gt;$$x_1 = ${realPart.toFixed(4).replace(/\.?0+$/, '')} + ${Math.abs(imagPart).toFixed(4).replace(/\.?0+$/, '')}i$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html += `&lt;p class="final-answer"&gt;$$x_2 = ${realPart.toFixed(4).replace(/\.?0+$/, '')} - ${Math.abs(imagPart).toFixed(4).replace(/\.?0+$/, '')}i$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerWrapper.innerHTML = html;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(window.MathJax) MathJax.typesetPromise([answerWrapper]);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">// --- DRAWING FUNCTIONS ---</p>
+<p class="p1">function drawGraphingGrid(pixelsPerUnit, centerX, centerY) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.grid;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let x = centerX; x &lt; mathCanvas.width; x += pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, mathCanvas.height); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let x = centerX; x &gt; 0; x -= pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, mathCanvas.height); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let y = centerY; y &lt; mathCanvas.height; y += pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(mathCanvas.width, y); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let y = centerY; y &gt; 0; y -= pixelsPerUnit) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(mathCanvas.width, y); ctx.stroke(); }</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.axis; ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(mathCanvas.width, centerY); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, mathCanvas.height); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '14px sans-serif'; ctx.fillStyle = colors.main;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tickInterval = pixelsPerUnit &gt; 75 ? 1 : pixelsPerUnit &gt; 35 ? 2 : 5;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for(let i = -100; i &lt; 100; i += tickInterval) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (i === 0) continue;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const xPos = centerX + i * pixelsPerUnit; const yPos = centerY - i * pixelsPerUnit;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (xPos &gt; 0 &amp;&amp; xPos &lt; mathCanvas.width) { ctx.fillText(i, xPos, centerY + 15); ctx.beginPath(); ctx.moveTo(xPos, centerY - 4); ctx.lineTo(xPos, centerY + 4); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (yPos &gt; 0 &amp;&amp; yPos &lt; mathCanvas.height) { ctx.fillText(i, centerX + 15, yPos); ctx.beginPath(); ctx.moveTo(centerX - 4, yPos); ctx.lineTo(centerX + 4, yPos); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('0', centerX - 10, centerY + 15);</p>
+<p class="p1">}</p>
+<p class="p1">function drawScatterPlot() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const dataString = document.getElementById('scatter-data')?.value || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const data = parseScatterData(dataString);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (data.length &lt; 2) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = colors.label;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.font = '18px sans-serif';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText("Please enter at least two valid data points.", mathCanvas.width / 2, mathCanvas.height / 2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const title = document.getElementById('scatter-title')?.value || 'Scatter Plot';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const xLabel = document.getElementById('scatter-x-label')?.value || 'X-Axis';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yLabel = document.getElementById('scatter-y-label')?.value || 'Y-Axis';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const showBestFit = document.getElementById('show-best-fit')?.checked;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const padding = { top: 60, right: 40, bottom: 60, left: 80 };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const plotWidth = mathCanvas.width - padding.left - padding.right;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const plotHeight = mathCanvas.height - padding.top - padding.bottom;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const xVals = data.map(p =&gt; p.x);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yVals = data.map(p =&gt; p.y);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const xMin = Math.min(...xVals), xMax = Math.max(...xVals);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yMin = Math.min(...yVals), yMax = Math.max(...yVals);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const xRange = xMax - xMin || 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yRange = yMax - yMin || 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const dataBounds = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>xMin: xMin - xRange * 0.1, xMax: xMax + xRange * 0.1,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>yMin: yMin - yRange * 0.1, yMax: yMax + yRange * 0.1</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapX = val =&gt; padding.left + ((val - dataBounds.xMin) / (dataBounds.xMax - dataBounds.xMin)) * plotWidth;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapY = val =&gt; padding.top + plotHeight - ((val - dataBounds.yMin) / (dataBounds.yMax - dataBounds.yMin)) * plotHeight;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Grid</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.grid;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const numGridLines = 5;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt;= numGridLines; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const x = padding.left + (plotWidth / numGridLines) * i;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath(); ctx.moveTo(x, padding.top); ctx.lineTo(x, padding.top + plotHeight); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const y = padding.top + (plotHeight / numGridLines) * i;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + plotWidth, y); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Axes</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.axis;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, padding.top + plotHeight); ctx.lineTo(padding.left + plotWidth, padding.top + plotHeight); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = colors.main;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = 'bold 24px sans-serif';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(title, mathCanvas.width / 2, padding.top / 2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '18px sans-serif';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(xLabel, padding.left + plotWidth / 2, mathCanvas.height - padding.bottom / 2 + 15);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.translate(padding.left / 2 - 15, padding.top + plotHeight / 2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.rotate(-Math.PI / 2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(yLabel, 0, 0);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '14px sans-serif';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textBaseline = 'top';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt;= 5; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const val = dataBounds.xMin + (dataBounds.xMax - dataBounds.xMin) * i / 5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText(val.toFixed(1), mapX(val), padding.top + plotHeight + 5);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'right';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textBaseline = 'middle';</p>
+<p class="p1"><span class="Apple-converted-space">     </span>for (let i = 0; i &lt;= 5; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const val = dataBounds.yMin + (dataBounds.yMax - dataBounds.yMin) * i / 5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText(val.toFixed(1), padding.left - 5, mapY(val));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = colors.point;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>data.forEach(p =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.arc(mapX(p.x), mapY(p.y), 5, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (showBestFit) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const { m, b, r2 } = calculateLinearRegression(data);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (isFinite(m) &amp;&amp; isFinite(b)) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = colors.answer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineWidth = 2.5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.moveTo(mapX(dataBounds.xMin), mapY(m * dataBounds.xMin + b));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(mapX(dataBounds.xMax), mapY(m * dataBounds.xMax + b));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const eqText = `y = ${m.toFixed(3)}x + ${b.toFixed(3)}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const r2Text = `R² = ${r2.toFixed(3)}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillRect(padding.left + 5, padding.top + 5, 200, 55);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = colors.main;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.font = 'bold 16px sans-serif';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillText(eqText, padding.left + 10, padding.top + 20);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillText(r2Text, padding.left + 10, padding.top + 45);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawIrrationalExplorer() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parsed = parseNumberInput(document.getElementById('number-input')?.value || 'pi');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!parsed) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p&gt;$$Invalid~Input$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(isAnswerToggledOn) answerWrapper.innerHTML = '&lt;p&gt;Invalid input.&lt;/p&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const value = parsed.val;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerInt = Math.floor(value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const min = centerInt - 1, max = centerInt + 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let svg = `&lt;svg width="100%" height="150" viewBox="0 0 800 150"&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>svg += `&lt;line x1="40" y1="75" x2="760" y2="75" stroke="${colors.axis}" stroke-width="2" /&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapX = val =&gt; 40 + ((val - min) / (max - min)) * 720;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = min; i &lt;= max; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const x = mapX(i);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>svg += `&lt;line x1="${x}" y1="65" x2="${x}" y2="85" stroke="${colors.axis}" stroke-width="2" /&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>svg += `&lt;text x="${x}" y="110" text-anchor="middle" font-size="24"&gt;${i}&lt;/text&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = min; i &lt; max; i += 0.1) {</p>
+<p class="p1"><span class="Apple-converted-space">       </span>if (Math.round(i*10) % 10 !== 0) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x = mapX(i);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>svg += `&lt;line x1="${x}" y1="70" x2="${x}" y2="80" stroke="#a0aec0" stroke-width="1" /&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const numberX = mapX(value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>svg += `&lt;polygon points="${numberX-8},50 ${numberX+8},50 ${numberX},65" fill="${colors.answer}" /&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>svg += `&lt;/svg&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>textDisplayWrapper.innerHTML = `&lt;p&gt;Where is $${parsed.symbol}$ on the number line?&lt;/p&gt;${svg}`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isAnswerToggledOn) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerWrapper.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="final-answer" style="text-align: center;"&gt;$$${parsed.symbol} \\approx ${value.toFixed(15)}$$&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="text-align: center;"&gt;Type: ${parsed.type}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(window.MathJax) MathJax.typesetPromise([answerWrapper, textDisplayWrapper]);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawScientificNotationTool() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const inputStr = document.getElementById('sci-num-input')?.value || '0';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let questionHtml = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let answerHtml = '';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parseSci = (str) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>str = str.replace(/\s/g, '').toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (str.includes('e')) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const parts = str.split('e');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(parts.length === 2 &amp;&amp; !isNaN(parseFloat(parts[0])) &amp;&amp; !isNaN(parseInt(parts[1]))) {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>return { value: parseFloat(str) };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const val = parseFloat(str);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (isNaN(val)) return null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return { value: val };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const numInfo = parseSci(inputStr);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!numInfo) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>questionHtml = "&lt;p&gt;$$Invalid~Input$$&lt;/p&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml = "";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const num = numInfo.value;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const standardStr = num.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sciParts = num.toExponential(4).split('e');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const coefficient = sciParts[0];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const exponent = sciParts[1];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sciStr = `${coefficient} \\times 10^{${parseInt(exponent)}}`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>questionHtml = `</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="font-weight: bold;"&gt;$Standard~Form$&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;$$${standardStr}$$&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml = `</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="font-weight: bold;"&gt;$Scientific~Notation$&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="final-answer"&gt;$$${sciStr}$$&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>textDisplayWrapper.innerHTML = questionHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(isAnswerToggledOn) answerWrapper.innerHTML = answerHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(window.MathJax) MathJax.typesetPromise([answerWrapper, textDisplayWrapper]);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawFunctionExplorer() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGraphingGrid(pixelsPerUnit, centerX, centerY);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const safeMath = { sin: Math.sin, cos: Math.cos, tan: Math.tan, abs: Math.abs, sqrt: Math.sqrt, pow: Math.pow, PI: Math.PI, E: Math.E };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const lines = Array.from(document.getElementById('equationLinesContainer').children);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>lines.forEach((lineDiv) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const eqInput = lineDiv.querySelector('input[type="text"]');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const colorInput = lineDiv.querySelector('input[type="color"]');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!eqInput || !colorInput || eqInput.value.trim() === '') return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const expr = eqInput.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const color = colorInput.value;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const func = new Function('x', ...Object.keys(safeMath), `return ${expr.replace(/\^/g, '**')}`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = color;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineWidth = 2.5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let firstPoint = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for(let px = 0; px &lt; mathCanvas.width; px++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const x = (px - centerX) / pixelsPerUnit;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const y = func(x, ...Object.values(safeMath));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (isFinite(y)) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const py = centerY - y * pixelsPerUnit;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if(firstPoint) { ctx.moveTo(px, py); firstPoint = false; } else { ctx.lineTo(px, py); }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} catch (e) { /* silent fail */ }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tableContainer = document.getElementById('function-table-container');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const xValuesStr = document.getElementById('table-x-values').value;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const xValues = xValuesStr.split(',').map(s =&gt; parseFloat(s.trim())).filter(n =&gt; !isNaN(n));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let tableHtml = '&lt;table class="w-full text-base text-left"&gt;&lt;thead&gt;&lt;tr class="border-b"&gt;&lt;th class="p-1 font-bold"&gt;$x$&lt;/th&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>lines.forEach((line, i) =&gt; { if(line.querySelector('input[type="text"]').value.trim()!=='') tableHtml += `&lt;th class="p-1 font-bold" style="color:${line.querySelector('input[type="color"]').value};"&gt;$f_{${i+1}}(x)$&lt;/th&gt;`});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tableHtml += '&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>xValues.forEach(x =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tableHtml += '&lt;tr class="border-b"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tableHtml += `&lt;td class="p-1 font-semibold"&gt;${x}&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>lines.forEach(line =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const expr = line.querySelector('input[type="text"]').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>if (expr !== '') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const func = new Function('x', ...Object.keys(safeMath), `return ${expr.replace(/\^/g, '**')}`);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const y = func(x, ...Object.values(safeMath));</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tableHtml += `&lt;td class="p-1"&gt;${isFinite(y) ? y.toFixed(3) : 'undef'}&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tableHtml += `&lt;td class="p-1"&gt;error&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">             </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tableHtml += '&lt;/tr&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tableHtml += '&lt;/tbody&gt;&lt;/table&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tableContainer.innerHTML = tableHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (window.MathJax &amp;&amp; window.MathJax.typesetPromise) { window.MathJax.typesetPromise([tableContainer]); }</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawFunctionTransformationTool() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGraphingGrid(pixelsPerUnit, centerX, centerY);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parentFuncStr = document.getElementById('parent-function').value;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const a = parseFloat(document.getElementById('slider-a').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = parseFloat(document.getElementById('slider-b').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const h = parseFloat(document.getElementById('slider-h').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const k = parseFloat(document.getElementById('slider-k').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const showParent = document.getElementById('show-parent-func').checked;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const f = new Function('x', `return ${parentFuncStr}`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const plotFunction = (func, color, width = 2, dashed = false) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = color;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.lineWidth = width;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (dashed) ctx.setLineDash([5, 5]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>else ctx.setLineDash([]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let firstPoint = true;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let px = 0; px &lt; mathCanvas.width; px++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x = (px - centerX) / pixelsPerUnit;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const y = func(x);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isFinite(y)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const py = centerY - y * pixelsPerUnit;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (firstPoint) { ctx.moveTo(px, py); firstPoint = false; } else { ctx.lineTo(px, py); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (showParent) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>plotFunction(x =&gt; f(x), colors.parentFunc, 2, true);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (b !== 0) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>plotFunction(x =&gt; a * f(b * (x - h)) + k, colors.answer, 3);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawSystemsOfEquations() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGraphingGrid(pixelsPerUnit, centerX, centerY);</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const lines = Array.from(document.getElementById('equationLinesContainer').children);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const equations = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>lines.forEach(lineDiv =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const eqInput = lineDiv.querySelector('input[type="text"]');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const colorInput = lineDiv.querySelector('input[type="color"]');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const eqData = parseLinearEquation(eqInput.value);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (eqData) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>equations.push({ ...eqData, color: colorInput.value });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>equations.forEach(eq =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = eq.color;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.lineWidth = 2.5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const y1 = eq.m * (-centerX / pixelsPerUnit) + eq.b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const y2 = eq.m * ((mathCanvas.width - centerX) / pixelsPerUnit) + eq.b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.moveTo(0, centerY - y1 * pixelsPerUnit);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.lineTo(mathCanvas.width, centerY - y2 * pixelsPerUnit);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const solutionDisplay = document.getElementById('solution-display');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let solHtml = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (equations.length &gt;= 2) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const eq1 = equations[0];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const eq2 = equations[1];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (Math.abs(eq1.m - eq2.m) &lt; 1e-9) { // Parallel or coinciding</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (Math.abs(eq1.b - eq2.b) &lt; 1e-9) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>solHtml = '&lt;h4 class="font-bold text-lg text-slate-800"&gt;$Infinite Solutions$&lt;/h4&gt;&lt;p class="text-base"&gt;$The lines are coinciding.$&lt;/p&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>solHtml = '&lt;h4 class="font-bold text-lg text-slate-800"&gt;$No Solution$&lt;/h4&gt;&lt;p class="text-base"&gt;$The lines are parallel.$&lt;/p&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x = (eq2.b - eq1.b) / (eq1.m - eq2.m);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const y = eq1.m * x + eq1.b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const canvasX = centerX + x * pixelsPerUnit;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const canvasY = centerY - y * pixelsPerUnit;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = colors.main;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arc(canvasX, canvasY, 8, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = 'white';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.stroke();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>solHtml = `&lt;h4 class="font-bold text-lg text-slate-800"&gt;$One Solution$&lt;/h4&gt;&lt;p class="text-base"&gt;$Intersection: (${x.toFixed(2)}, ${y.toFixed(2)})$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>solHtml = '&lt;p class="text-base"&gt;$Enter at least two equations to find a solution.$&lt;/p&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>solutionDisplay.innerHTML = solHtml;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawExponentRules() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const expr = document.getElementById('exponent-expression')?.value.replace(/\*/g, ' * ') || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let questionHtml = `&lt;p&gt;$$Simplify: ${formatExpressionForJax(expr)}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let answerHtml = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const expand = (base, exp) =&gt; Array(exp).fill(`(${base})`).join(' \\cdot ');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const cleanedExpr = expr.replace(/\s/g, '');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let match = cleanedExpr.match(/^([a-z0-9]+)\^(\d+)\*([a-z0-9]+)\^(\d+)$/);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (match &amp;&amp; match[1] === match[3]) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const [_, base, exp1, __, exp2] = match.map(m =&gt; isNaN(parseInt(m)) ? m : parseInt(m));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;$$${base}^${exp1} \\times ${base}^${exp2}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;Expand the terms:&lt;/p&gt;&lt;p&gt;$$= ${expand(base, exp1)} \\times ${expand(base, exp2)}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;Count the total bases:&lt;/p&gt;&lt;p&gt;$$= ${expand(base, exp1 + exp2)}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p class="final-answer"&gt;Rewrite using the rule (add exponents):&lt;/p&gt;&lt;p class="final-answer"&gt;$$= ${base}^{${exp1}+${exp2}} = \\mathbf{${base}^{${exp1 + exp2}}}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else if ((match = cleanedExpr.match(/^([a-z0-9]+)\^(\d+)\/([a-z0-9]+)\^(\d+)$/)) &amp;&amp; match[1] === match[3]) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const [_, base, exp1, __, exp2] = match.map(m =&gt; isNaN(parseInt(m)) ? m : parseInt(m));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;$$ \\frac{${base}^${exp1}}{${base}^${exp2}} $$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;Expand the terms:&lt;/p&gt;&lt;p&gt;$$ = \\frac{${Array(exp1).fill(base).join(' \\cdot ')}}{${Array(exp2).fill(base).join(' \\cdot ')}} $$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const common = Math.min(exp1, exp2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const top = Array(exp1).fill(base);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const bottom = Array(exp2).fill(base);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for(let i=0; i&lt;common; i++) { top[i] = `\\cancel{${base}}`; bottom[i] = `\\cancel{${base}}`; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;Cancel common factors:&lt;/p&gt;&lt;p&gt;$$ = \\frac{${top.join(' \\cdot ')}}{${bottom.join(' \\cdot ')}} $$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p class="final-answer"&gt;Rewrite using the rule (subtract exponents):&lt;/p&gt;&lt;p class="final-answer"&gt;$$ = ${base}^{${exp1}-${exp2}} = \\mathbf{${base}^{${exp1-exp2}}} $$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else if ((match = cleanedExpr.match(/^\(([a-z0-9]+)\^(\d+)\)\^(\d+)$/))) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const [_, base, exp1, exp2] = match.map(m =&gt; isNaN(parseInt(m)) ? m : parseInt(m));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;$$(${base}^${exp1})^${exp2}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;Expand the outer exponent:&lt;/p&gt;&lt;p&gt;$$= ${Array(exp2).fill(`(${base}^${exp1})`).join(' \\cdot ')}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p&gt;Expand all terms:&lt;/p&gt;&lt;p&gt;$$= ${Array(exp2).fill(expand(base, exp1)).join(' \\cdot ')}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml += `&lt;p class="final-answer"&gt;Rewrite using the rule (multiply exponents):&lt;/p&gt;&lt;p class="final-answer"&gt;$$= ${base}^{${exp1} \\times ${exp2}} = \\mathbf{${base}^{${exp1*exp2}}}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerHtml = `&lt;p&gt;$$Invalid~or~unsupported~expression~format.$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>textDisplayWrapper.innerHTML = questionHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(isAnswerToggledOn) answerWrapper.innerHTML = answerHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(window.MathJax) MathJax.typesetPromise([answerWrapper, textDisplayWrapper]);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawLinearEquationFromData() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapToCanvas = ({x, y}) =&gt; ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGraphingGrid(pixelsPerUnit, centerX, centerY);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const dataString = document.getElementById('scatter-data')?.value || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const data = parseScatterData(dataString);</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = colors.point;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>data.forEach(p =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const canvasP = mapToCanvas(p);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.arc(canvasP.x, canvasP.y, 5, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const showBestFit = document.getElementById('show-best-fit')?.checked;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (showBestFit &amp;&amp; data.length &gt;= 2) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const { m, b } = calculateLinearRegression(data);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (isFinite(m) &amp;&amp; isFinite(b)) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const p1 = { x: -100, y: m * -100 + b };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const p2 = { x: 100, y: m * 100 + b };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const canvasP1 = mapToCanvas(p1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const canvasP2 = mapToCanvas(p2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = colors.answer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineWidth = 2.5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.setLineDash([5, 5]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.moveTo(canvasP1.x, canvasP1.y);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(canvasP2.x, canvasP2.y);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.setLineDash([]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const canvasP1 = mapToCanvas(manualLinePoint1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const canvasP2 = mapToCanvas(manualLinePoint2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.manualLine;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 2.5;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.moveTo(canvasP1.x, canvasP1.y);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineTo(canvasP2.x, canvasP2.y);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>[canvasP1, canvasP2].forEach(p =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = colors.manualLine;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = 'white';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const manualEqDiv = document.getElementById('manual-line-eq');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const m_manual = (manualLinePoint2.x - manualLinePoint1.x) === 0 ? Infinity : (manualLinePoint2.y - manualLinePoint1.y) / (manualLinePoint2.x - manualLinePoint1.x);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b_manual = manualLinePoint1.y - m_manual * manualLinePoint1.x;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>manualEqDiv.innerHTML = `&lt;span&gt;$y = ${m_manual.toFixed(2)}x ${b_manual &gt;= 0 ? '+' : '-'} ${Math.abs(b_manual).toFixed(2)}$&lt;/span&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const predX = parseFloat(document.getElementById('prediction-x').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const predYDiv = document.getElementById('prediction-y');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let predHtml = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!isNaN(predX)) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>predHtml += `&lt;p&gt;Manual: $y = ${ (m_manual * predX + b_manual).toFixed(2)}$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(showBestFit &amp;&amp; data.length &gt;= 2) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const {m, b} = calculateLinearRegression(data);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(isFinite(m)) predHtml += `&lt;p&gt;Calculated: $y = ${(m * predX + b).toFixed(2)}$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>predYDiv.innerHTML = predHtml;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawCongruenceSimilarity() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGraphingGrid(pixelsPerUnit, centerX, centerY);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const targetShape = [{x: 4, y: 1}, {x: 7, y: 1}, {x: 5.5, y: 4}];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const baseShape = [{x: -6, y: -4}, {x: -3, y: -4}, {x: -4.5, y: -1}];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tx = parseFloat(document.getElementById('slider-tx').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ty = parseFloat(document.getElementById('slider-ty').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rot = parseFloat(document.getElementById('slider-rot').value) * Math.PI / 180;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const scale = parseFloat(document.getElementById('slider-scale').value);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const transformPoint = (p) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let newX = p.x * scale;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let newY = p.y * scale;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let rotatedX = newX * Math.cos(rot) - newY * Math.sin(rot);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let rotatedY = newX * Math.sin(rot) + newY * Math.cos(rot);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return { x: rotatedX + tx, y: rotatedY + ty };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const transformedShape = baseShape.map(transformPoint);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const drawPolygon = (points, color, stroke = true) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = color;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = "black";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const p0_canvas = {x: centerX + points[0].x * pixelsPerUnit, y: centerY - points[0].y * pixelsPerUnit};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.moveTo(p0_canvas.x, p0_canvas.y);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for(let i = 1; i &lt; points.length; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const pi_canvas = {x: centerX + points[i].x * pixelsPerUnit, y: centerY - points[i].y * pixelsPerUnit};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(pi_canvas.x, pi_canvas.y);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.closePath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.globalAlpha = 0.6;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.globalAlpha = 1.0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(stroke) ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawPolygon(targetShape, colors.targetShape);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawPolygon(transformedShape, colors.primaryBlue);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const checkResultDiv = document.getElementById('check-result');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let distSq = (p1, p2) =&gt; (p1.x-p2.x)**2 + (p1.y-p2.y)**2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let matchCount = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tolerance = 0.1;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>for(const p1 of transformedShape) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for(const p2 of targetShape) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(distSq(p1, p2) &lt; tolerance) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>matchCount++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (matchCount === targetShape.length) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(Math.abs(scale - 1) &lt; 0.05) checkResultDiv.innerHTML = "$Congruent!$";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>else checkResultDiv.innerHTML = "$Similar!$";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>checkResultDiv.innerHTML = "$Not~yet...$";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawInteractiveCoordinatePlane() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGraphingGrid(pixelsPerUnit, centerX, centerY);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapToCanvas = ({x, y}) =&gt; ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const objectListDiv = document.getElementById('objects-list');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let listHtml = '';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>plottedObjects.forEach((obj, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (obj.type === 'point') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const p_canvas = mapToCanvas(obj);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = colors.point;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arc(p_canvas.x, p_canvas.y, 6, 0, Math.PI*2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>listHtml += `&lt;div class="flex items-center justify-between p-1"&gt;&lt;span&gt;$Point: (${obj.x.toFixed(2)}, ${obj.y.toFixed(2)})$&lt;/span&gt;&lt;button data-index="${index}" class="remove-object-btn remove-line-button"&gt;×&lt;/button&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (obj.type === 'line') {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const p1_canvas = mapToCanvas(obj.p1);</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const p2_canvas = mapToCanvas(obj.p2);</p>
+<p class="p1"><span class="Apple-converted-space">             </span>ctx.strokeStyle = obj.color || colors.answer;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>ctx.lineWidth = 2.5;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>ctx.moveTo(p1_canvas.x, p1_canvas.y);</p>
+<p class="p1"><span class="Apple-converted-space">             </span>ctx.lineTo(p2_canvas.x, p2_canvas.y);</p>
+<p class="p1"><span class="Apple-converted-space">             </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>listHtml += `&lt;div class="flex items-center justify-between p-1"&gt;&lt;span&gt;$Line: (${obj.p1.x.toFixed(1)}, ${obj.p1.y.toFixed(1)}) \\to (${obj.p2.x.toFixed(1)}, ${obj.p2.y.toFixed(1)})$&lt;/span&gt;&lt;button data-index="${index}" class="remove-object-btn remove-line-button"&gt;×&lt;/button&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (snapIndicatorPos) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = 'rgba(150, 150, 150, 0.5)';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.arc(snapIndicatorPos.x, snapIndicatorPos.y, 8, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>objectListDiv.innerHTML = listHtml;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.remove-object-btn').forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>btn.onclick = (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>plottedObjects.splice(parseInt(e.target.dataset.index), 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawDataSetAnalyzer() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (analysisResults) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const { minVal, q1, median, q3, maxVal } = analysisResults;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const padding = { top: 40, right: 40, bottom: 60, left: 40 };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const plotWidth = mathCanvas.width - padding.left - padding.right;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const y = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const dataRange = maxVal - minVal === 0 ? 1 : maxVal - minVal;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mapX = val =&gt; padding.left + ((val - minVal) / dataRange) * plotWidth;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const tickValues = [minVal, q1, median, q3, maxVal];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = colors.grid; ctx.lineWidth = 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tickValues.forEach(val =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const x = mapX(val);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath(); ctx.moveTo(x, padding.top); ctx.lineTo(x, mathCanvas.height - padding.bottom); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = colors.axis; ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath(); ctx.moveTo(mapX(minVal), y); ctx.lineTo(mapX(q1), y); ctx.moveTo(mapX(q3), y); ctx.lineTo(mapX(maxVal), y); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = 'rgba(43, 109, 254, 0.5)';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillRect(mapX(q1), y - 30, mapX(q3) - mapX(q1), 60);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeRect(mapX(q1), y - 30, mapX(q3) - mapX(q1), 60);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = colors.answer; ctx.lineWidth = 4;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath(); ctx.moveTo(mapX(median), y - 30); ctx.lineTo(mapX(median), y + 30); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = colors.main; ctx.font = '16px sans-serif'; ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tickValues.forEach(val =&gt; { ctx.fillText(val.toFixed(2), mapX(val), y + 50); });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.font = '14px sans-serif';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText("Min", mapX(minVal), y - 40); ctx.fillText("Q1", mapX(q1), y - 40);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText("Median", mapX(median), y - 40);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText("Q3", mapX(q3), y - 40);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText("Max", mapX(maxVal), y - 40);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p class="text-xl text-center text-slate-500"&gt;Enter data and toggle Answer to see results.&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawProbabilitySimulator() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!simulationResults) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p class="text-xl text-center text-slate-500"&gt;Choose simulation type, number of trials, and toggle Answer.&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const { counts, trials, outcomes, simType } = simulationResults;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let html = `&lt;h4 class="font-bold text-xl text-slate-800"&gt;Simulation Results (${trials.toLocaleString()} Trials)&lt;/h4&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const theoreticalProbs = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>sum2d6: { '2': 1/36, '3': 2/36, '4': 3/36, '5': 4/36, '6': 5/36, '7': 6/36, '8': 5/36, '9': 4/36, '10': 3/36, '11': 2/36, '12': 1/36},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>twoCoins: { 'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25 },</p>
+<p class="p1"><span class="Apple-converted-space">        </span>coinAndDice: {}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>outcomes.filter(o =&gt; o.startsWith('H') || o.startsWith('T')).forEach(o =&gt; theoreticalProbs.coinAndDice[o] = 1/12);</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;table class="w-full text-left text-base sm:text-lg mt-4"&gt;&lt;thead&gt;&lt;tr class="border-b-2"&gt;&lt;th class="p-2"&gt;Outcome&lt;/th&gt;&lt;th class="p-2"&gt;Count&lt;/th&gt;&lt;th class="p-2"&gt;Experimental P(x)&lt;/th&gt;&lt;th class="p-2"&gt;Theoretical P(x)&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const outcome of outcomes) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const count = counts[outcome] || 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const experimentalProb = trials &gt; 0 ? count / trials : 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let theoreticalProb = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (theoreticalProbs[simType]) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>theoreticalProb = theoreticalProbs[simType][outcome] || 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>theoreticalProb = (1 / outcomes.length);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>html += `&lt;tr class="border-b"&gt;&lt;td class="p-2 font-bold"&gt;${outcome}&lt;/td&gt;&lt;td class="p-2"&gt;${count.toLocaleString()}&lt;/td&gt;&lt;td class="p-2"&gt;${(experimentalProb * 100).toFixed(2)}%&lt;/td&gt;&lt;td class="p-2"&gt;${(theoreticalProb * 100).toFixed(2)}%&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;/tbody&gt;&lt;/table&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerWrapper.innerHTML = html;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function drawGeometricSeriesVisualizer() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearCanvas(mathCanvas, ctx);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const a = parseFloat(document.getElementById('slider-a').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const r = parseFloat(document.getElementById('slider-r').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const numTerms = parseInt(document.getElementById('series-terms').value);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(numTerms &lt;= 0) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const terms = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let partialSum = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; numTerms; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const termValue = a * Math.pow(r, i);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(!isFinite(termValue)) break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>terms.push(termValue);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>partialSum += termValue;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (terms.length === 0) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const padding = { top: 40, right: 40, bottom: 60, left: 60 };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const plotWidth = mathCanvas.width - padding.left - padding.right;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const plotHeight = mathCanvas.height - padding.top - padding.bottom;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const maxAbsTerm = Math.max(...terms.map(Math.abs), Math.abs(a));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yMax = maxAbsTerm * 1.2 || 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yMin = -yMax;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const yRange = yMax - yMin;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapX = termIndex =&gt; padding.left + ((termIndex + 0.5) / numTerms) * plotWidth;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mapY = val =&gt; (mathCanvas.height - padding.bottom) - ((val - yMin) / yRange) * plotHeight;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const barWidth = (plotWidth / numTerms) * 0.8;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const zeroY = mapY(0);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.grid; ctx.lineWidth = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt;= 10; i++) { ctx.beginPath(); const y = padding.top + i * plotHeight / 10; ctx.moveTo(padding.left, y); ctx.lineTo(mathCanvas.width - padding.right, y); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; numTerms; i++) { ctx.beginPath(); const x = mapX(i); ctx.moveTo(x, padding.top); ctx.lineTo(x, mathCanvas.height - padding.bottom); ctx.stroke(); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = colors.axis; ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.moveTo(padding.left, zeroY); ctx.lineTo(mathCanvas.width - padding.right, zeroY); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, mathCanvas.height - padding.bottom); ctx.stroke();</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>terms.forEach((term, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = term &gt;= 0 ? colors.primaryBlue : colors.negativeTerm;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const x = mapX(i) - barWidth / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const y = term &gt;= 0 ? mapY(term) : zeroY;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const height = Math.abs(mapY(term) - zeroY);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillRect(x, y, barWidth, height);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let resultText = `&lt;p&gt;$S_{${numTerms}} = ${partialSum.toPrecision(4)}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const isConvergent = Math.abs(r) &lt; 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isConvergent) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sumToInfinity = a / (1 - r);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sumY = mapY(sumToInfinity);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.strokeStyle = colors.answer; ctx.lineWidth = 2.5; ctx.setLineDash([8, 8]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.beginPath(); ctx.moveTo(padding.left, sumY); ctx.lineTo(mathCanvas.width - padding.right, sumY); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.setLineDash([]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillStyle = colors.answer; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ctx.fillText(`Sum to Infinity: ${sumToInfinity.toFixed(3)}`, padding.left + 5, sumY - 5);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultText += `&lt;p&gt;Converges to $S_\\infty = \\frac{a}{1-r} = ${sumToInfinity.toPrecision(4)}$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resultText += `&lt;p&gt;Series Diverges (since $|r| \\ge 1$)&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('series-results').innerHTML = resultText;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = colors.main; ctx.font = '14px sans-serif'; ctx.textAlign = 'right';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt;= 10; i++) { const val = yMin + (yRange * i / 10); ctx.fillText(val.toFixed(1), padding.left - 5, mapY(val)); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; numTerms; i++) { if(numTerms &lt;= 20 || i % Math.floor(numTerms/10) === 0) { ctx.fillText(i + 1, mapX(i), zeroY + 20); } }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText("Term (n)", padding.left + plotWidth/2, mathCanvas.height - 15);</p>
+<p class="p1">}</p>
+<p class="p1">function drawExpressionSimplifier() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const expr = document.getElementById('algebraic-expression')?.value || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (expr) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p&gt;$$${formatExpressionForJax(expr)}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p class="text-xl text-center text-slate-500"&gt;Enter an expression and toggle Answer.&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isAnswerToggledOn) runSimplification();</p>
+<p class="p1">}</p>
+<p class="p1">function drawEquationSolver() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const eq = document.getElementById('equation-input')?.value || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (eq) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p&gt;$$${formatExpressionForJax(eq.replace(/\^/g, '**'))}$$&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>textDisplayWrapper.innerHTML = `&lt;p class="text-xl text-center text-slate-500"&gt;Enter an equation and toggle Answer.&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isAnswerToggledOn) runEquationSolver();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// --- MAIN CONTROL FUNCTIONS ---</p>
+<p class="p1">function handleAnswerToggle() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>isAnswerToggledOn = !isAnswerToggledOn;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>updateAnswerToggleVisuals();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isAnswerToggledOn) runCurrentModeCalculation();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else answerWrapper.classList.add('hidden');</p>
+<p class="p1">}</p>
+<p class="p1">function resetAnswerToggle() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isAnswerToggledOn) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>isAnswerToggledOn = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>updateAnswerToggleVisuals();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerWrapper.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p1">function updateAnswerToggleVisuals() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!answerToggleBtn || !answerToggleDot) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerToggleBtn.classList.toggle('toggle-on', isAnswerToggledOn);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerToggleBtn.classList.toggle('toggle-off', !isAnswerToggledOn);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerToggleDot.classList.toggle('dot-on', isAnswerToggledOn);</p>
+<p class="p1">}</p>
+<p class="p1">function runCurrentModeCalculation() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerWrapper.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>switch (currentMode) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'probabilitySimulator': runSimulation(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'dataSetAnalyzer': runDataSetAnalysis(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'expressionSimplifier': runSimplification(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'equationSolver': runEquationSolver(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'exponentRules':</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'scientificNotation':</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'irrationalExplorer':</p>
+<p class="p1"><span class="Apple-converted-space">            </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function handleModeChange() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>plottedObjects = []; draggingPoint = null;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>analysisResults = null; simulationResults = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>currentMode = modeSelector.value;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>resetAnswerToggle();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setupInputsForMode(currentMode, false);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(handleDraw, 310);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// **** THE FIX IS IN THESE TWO FUNCTIONS ****</p>
+<p class="p2"><br></p>
+<p class="p1">function setupInputsForMode(mode, shouldDraw = true) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerWrapper.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const isTopRowMode = topRowInputModes.includes(mode);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Reset layout to a predictable, visible state before applying mode-specific changes.</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mainControls.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>inputsPanel.classList.remove('panel-hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>displayWrapper.classList.remove('canvas-expanded');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>menuToggleBtn.classList.add('toggle-on');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>menuToggleBtn.classList.remove('toggle-off');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>menuToggleDot.classList.add('dot-on');</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isTopRowMode) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Configure for a mode with NO side panel ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>inputsPanel.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>topInputContainer.innerHTML = topRowInputTemplates[mode] || '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerToggleWrapper.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>displayWrapper.classList.add('display-shrunken');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// This mode should be full width by default.</p>
+<p class="p1"><span class="Apple-converted-space">        </span>inputsPanel.classList.add('panel-hidden');<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>displayWrapper.classList.add('canvas-expanded');<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>contentWrapper.style.gap = '0';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Configure for a mode WITH a side panel ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>inputsPanel.innerHTML = panelInputTemplates[mode] || '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>topInputContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>answerToggleWrapper.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>displayWrapper.classList.remove('display-shrunken');</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// This mode is split-screen by default.</p>
+<p class="p1"><span class="Apple-converted-space">        </span>contentWrapper.style.gap = '1rem';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const isCanvasMode = !textBasedModes.includes(mode) || mode === 'dataSetAnalyzer';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mathCanvas.classList.toggle('hidden', !isCanvasMode);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>textDisplayWrapper.classList.toggle('hidden', isCanvasMode);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('input, textarea, select').forEach(el =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>el.addEventListener('input', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>resetAnswerToggle();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!isTopRowMode) {</p>
+<p class="p1"><span class="Apple-converted-space">         </span>if (mode === 'functionExplorer' || mode === 'systemsOfEquations') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const addBtnId = mode === 'functionExplorer' ? 'add-function-btn' : 'add-equation-btn';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const addEquation = (eqValue = '') =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const container = document.getElementById('equationLinesContainer');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!container) return;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const lineDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>lineDiv.className = 'flex items-center gap-2 w-full';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const color = defaultLineColors[nextLineColorIndex++ % defaultLineColors.length];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const placeholder = mode === 'functionExplorer' ? 'e.g., x**2' : 'e.g., y=2x-1';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>lineDiv.innerHTML = `&lt;input type="text" placeholder="${placeholder}" class="flex-grow p-1 border-2 rounded-lg text-base" value="${eqValue}"&gt;&lt;input type="color" value="${color}" class="w-8 h-8 rounded-md"&gt;&lt;button type="button" class="remove-line-button"&gt;×&lt;/button&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>lineDiv.querySelectorAll('input').forEach(i =&gt; i.addEventListener('input', handleDraw));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>lineDiv.querySelector('.remove-line-button').addEventListener('click', () =&gt; { lineDiv.remove(); handleDraw(); });</p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(lineDiv);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(addBtnId).onclick = () =&gt; addEquation();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (mode === 'functionExplorer') { addEquation('x**2'); }<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>else { addEquation('y=2x+1'); addEquation('y=-x+4'); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (mode === 'interactiveCoordinatePlane') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>plottedObjects = [{ type: 'point', x: 2, y: 3 }];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (mode === 'functionTransformation' || mode === 'congruenceSimilarity' || mode === 'geometricSeries') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sliderParams = {'functionTransformation': ['a', 'b', 'h', 'k'], 'congruenceSimilarity': ['tx', 'ty', 'rot', 'scale'], 'geometricSeries': ['a', 'r']};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>sliderParams[mode].forEach(param =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const slider = document.getElementById(`slider-${param}`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const label = document.getElementById(`label-${param}`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>slider.addEventListener('input', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>label.innerHTML = `$${slider.value}${param === 'rot' ? '°' : ''}$`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (window.MathJax) MathJax.typesetPromise();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (shouldDraw) handleDraw();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function handleDraw() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parent = mathCanvas.parentElement;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (parent &amp;&amp; (mathCanvas.width !== parent.clientWidth || mathCanvas.height !== parent.clientHeight)) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>mathCanvas.width = parent.clientWidth;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>mathCanvas.height = parent.clientHeight;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>switch (currentMode) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'scatterPlotBestFit': drawScatterPlot(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'irrationalExplorer': drawIrrationalExplorer(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'scientificNotation': drawScientificNotationTool(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'functionExplorer': drawFunctionExplorer(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'functionTransformation': drawFunctionTransformationTool(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'systemsOfEquations': drawSystemsOfEquations(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'exponentRules': drawExponentRules(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'linearEquationFromData': drawLinearEquationFromData(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'congruenceSimilarity': drawCongruenceSimilarity(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'interactiveCoordinatePlane': drawInteractiveCoordinatePlane(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'dataSetAnalyzer': drawDataSetAnalyzer(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'probabilitySimulator': drawProbabilitySimulator(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'geometricSeries': drawGeometricSeriesVisualizer(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'expressionSimplifier': drawExpressionSimplifier(); break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>case 'equationSolver': drawEquationSolver(); break;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (window.MathJax &amp;&amp; window.MathJax.typesetPromise) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.MathJax.typesetPromise([document.body]).catch(console.error);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// --- EVENT LISTENERS ---</p>
+<p class="p1">document.addEventListener('DOMContentLoaded', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>modeSelector.value = 'equationSolver';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>currentMode = 'equationSolver';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>modeSelector.addEventListener('change', handleModeChange);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>window.addEventListener('resize', () =&gt; { setTimeout(handleDraw, 150); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>answerToggleBtn.addEventListener('click', handleAnswerToggle);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>menuToggleBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const isCurrentlyOn = menuToggleBtn.classList.contains('toggle-on');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const isTopRowMode = topRowInputModes.includes(currentMode);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (isTopRowMode) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// In a top-row mode, the toggle ONLY hides the main controls.</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// It does NOT touch the display wrapper's width.</p>
+<p class="p1"><span class="Apple-converted-space">            </span>mainControls.classList.toggle('hidden', isCurrentlyOn);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// In a panel mode, the toggle hides the side panel and expands the display.</p>
+<p class="p1"><span class="Apple-converted-space">            </span>inputsPanel.classList.toggle('panel-hidden', isCurrentlyOn);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>displayWrapper.classList.toggle('canvas-expanded', isCurrentlyOn);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>contentWrapper.style.gap = isCurrentlyOn ? '0' : '1rem';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// This part is the same for both scenarios: just update the button's visual state.</p>
+<p class="p1"><span class="Apple-converted-space">        </span>menuToggleBtn.classList.toggle('toggle-on', !isCurrentlyOn);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>menuToggleBtn.classList.toggle('toggle-off', isCurrentlyOn);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>menuToggleDot.classList.toggle('dot-on', !isCurrentlyOn);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>setTimeout(() =&gt; { handleDraw(); }, 310);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>mathCanvas.addEventListener('mousedown', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const rect = mathCanvas.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mapToCanvas = ({x, y}) =&gt; ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mapFromCanvas = ({x, y}) =&gt; ({ x: (x - centerX) / pixelsPerUnit, y: (centerY - y) / pixelsPerUnit });</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (currentMode === 'linearEquationFromData') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const p1Canvas = mapToCanvas(manualLinePoint1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const p2Canvas = mapToCanvas(manualLinePoint2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (Math.hypot(mousePos.x - p1Canvas.x, mousePos.y - p1Canvas.y) &lt; 15) draggingPoint = 'p1';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else if (Math.hypot(mousePos.x - p2Canvas.x, mousePos.y - p2Canvas.y) &lt; 15) draggingPoint = 'p2';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (currentMode === 'interactiveCoordinatePlane') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentTool = document.querySelector('input[name="coord-tool"]:checked').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mathMousePos = snappedMathPos || mapFromCanvas(mousePos);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (currentTool === 'plotPoint') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>plottedObjects.push({ type: 'point', ...mathMousePos });</p>
+<p class="p1"><span class="Apple-converted-space">                </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (currentTool === 'drawLine') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>isDrawingLine = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>lineStartPoint = mathMousePos;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mathCanvas.addEventListener('mousemove', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const rect = mathCanvas.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mapToCanvas = ({x, y}) =&gt; ({ x: centerX + x * pixelsPerUnit, y: centerY - y * pixelsPerUnit });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mapFromCanvas = ({x, y}) =&gt; ({ x: (x - centerX) / pixelsPerUnit, y: (centerY - y) / pixelsPerUnit });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let needsRedraw = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (currentMode === 'interactiveCoordinatePlane') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mathMousePos = mapFromCanvas(mousePos);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const snappedX = Math.round(mathMousePos.x);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const snappedY = Math.round(mathMousePos.y);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let oldSnap = snapIndicatorPos;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (Math.hypot(mapToCanvas(mathMousePos).x - mapToCanvas({x:snappedX, y:snappedY}).x, mapToCanvas(mathMousePos).y - mapToCanvas({x:snappedX, y:snappedY}).y) &lt; 10) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>snappedMathPos = { x: snappedX, y: snappedY };</p>
+<p class="p1"><span class="Apple-converted-space">                </span>snapIndicatorPos = mapToCanvas(snappedMathPos);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>snappedMathPos = null;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>snapIndicatorPos = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(oldSnap !== snapIndicatorPos) needsRedraw = true;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (draggingPoint &amp;&amp; currentMode === 'linearEquationFromData') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mathMousePos = mapFromCanvas(mousePos);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (draggingPoint === 'p1') manualLinePoint1 = mathMousePos;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else if (draggingPoint === 'p2') manualLinePoint2 = mathMousePos;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>needsRedraw = true;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (isDrawingLine &amp;&amp; currentMode === 'interactiveCoordinatePlane') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>handleDraw(); // Redraw base objects first</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const startCanvas = mapToCanvas(lineStartPoint);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const endCanvas = snapIndicatorPos || mousePos;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.setLineDash([5,5]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath(); ctx.moveTo(startCanvas.x, startCanvas.y); ctx.lineTo(endCanvas.x, endCanvas.y); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.setLineDash([]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else if (needsRedraw) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mathCanvas.addEventListener('mouseup', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const rect = mathCanvas.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const pixelsPerUnit = 40;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerX = mathCanvas.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const centerY = mathCanvas.height / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mapFromCanvas = ({x, y}) =&gt; ({ x: (x - centerX) / pixelsPerUnit, y: (centerY - y) / pixelsPerUnit });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (draggingPoint) draggingPoint = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (isDrawingLine &amp;&amp; currentMode === 'interactiveCoordinatePlane') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const lineEndPoint = snappedMathPos || mapFromCanvas(mousePos);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const color = defaultLineColors[nextLineColorIndex++ % defaultLineColors.length];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (Math.hypot(lineEndPoint.x - lineStartPoint.x, lineEndPoint.y - lineStartPoint.y) &gt; 0.1) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>plottedObjects.push({ type: 'line', p1: lineStartPoint, p2: lineEndPoint, color: color });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isDrawingLine = false; lineStartPoint = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mathCanvas.addEventListener('mouseleave', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(currentMode === 'interactiveCoordinatePlane') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>snapIndicatorPos = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>snappedMathPos = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(!isDrawingLine) handleDraw();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.addEventListener('mouseup', () =&gt; { if(draggingPoint) draggingPoint = null; });</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>setupInputsForMode(currentMode);</p>
+<p class="p1">});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
